@@ -18,7 +18,7 @@ export const DepartureRow: React.FC<DepartureRowProps> = ({ group, timezone, now
   const upcomingDepartures = group.departures.slice(0, 2)
 
   return (
-    <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200">
+    <div className="adaptive-row flex flex-col md:flex-row md:items-center gap-3 md:gap-4 p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200">
       {/* Mobile layout: Route name on top */}
       <div className="flex items-center gap-3 md:hidden">
         <div className="flex-shrink-0">
@@ -26,7 +26,7 @@ export const DepartureRow: React.FC<DepartureRowProps> = ({ group, timezone, now
             routeShortName={group.routeShortName}
             routeColor={group.routeColor}
             routeTextColor={group.routeTextColor}
-            className={`text-2xl ${showTechnicalDetails ? 'h-16 min-w-16' : 'h-14 min-w-14'}`}
+            className="adaptive-route-icon"
           />
         </div>
         <div className="flex-grow min-w-0">
@@ -42,7 +42,7 @@ export const DepartureRow: React.FC<DepartureRowProps> = ({ group, timezone, now
           routeShortName={group.routeShortName}
           routeColor={group.routeColor}
           routeTextColor={group.routeTextColor}
-          className={`text-2xl ${showTechnicalDetails ? 'h-16 min-w-16' : 'h-14 min-w-14'}`}
+          className="adaptive-route-icon"
         />
       </div>
 
@@ -56,7 +56,7 @@ export const DepartureRow: React.FC<DepartureRowProps> = ({ group, timezone, now
       {/* Departure times */}
       <div className="flex gap-2">
         {upcomingDepartures.length === 0 ? (
-          <div className={`flex items-center justify-center min-w-[10rem] ${showTechnicalDetails ? 'h-24' : 'h-20'} rounded-lg bg-gray-100 text-gray-500 text-sm px-4`}>
+          <div className={`adaptive-departure-square ${showTechnicalDetails ? 'with-tech' : ''} flex items-center justify-center min-w-[10rem] rounded-lg bg-gray-100 text-gray-500 text-sm px-4`}>
             {t('departureBoard.noMoreDepartures')}
           </div>
         ) : (
@@ -72,7 +72,7 @@ export const DepartureRow: React.FC<DepartureRowProps> = ({ group, timezone, now
               />
             ))}
             {upcomingDepartures.length === 1 && (
-              <div className={`min-w-[5rem] ${showTechnicalDetails ? 'h-24' : 'h-20'} rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 text-xs`}>
+              <div className={`adaptive-departure-square ${showTechnicalDetails ? 'with-tech' : ''} min-w-[5rem] rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 text-xs`}>
                 -
               </div>
             )}
