@@ -16,7 +16,6 @@ export const DepartureRow: React.FC<DepartureRowProps> = ({ group, timezone, now
   const { t } = useTranslation()
   const headsign = group.headsigns[0] || 'Unknown Destination'
   const upcomingDepartures = group.departures.slice(0, 2)
-  const tripShortName = upcomingDepartures[0]?.tripShortName || ''
 
   return (
     <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200">
