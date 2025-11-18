@@ -84,10 +84,25 @@ export const useDepartures = (
 
             // Only add to departures if it hasn't passed yet
             if (stopTime.departure_time >= currentTime) {
-              // Parse departure time
+              // Parse departure time and create it in agency timezone
               const [hours, minutes, seconds] = stopTime.departure_time.split(':').map(Number)
-              const departureDate = new Date(now)
-              departureDate.setHours(hours >= 24 ? hours - 24 : hours, minutes, seconds || 0, 0)
+              const actualHours = hours >= 24 ? hours - 24 : hours
+
+              // Format current time in agency timezone with timezone offset (e.g., "2024-01-15T19:34:00+01:00")
+              const agencyNowWithOffset = formatInTimeZone(now, agencyTimezone, "yyyy-MM-dd'T'HH:mm:ssXXX")
+
+              // Extract date part (2024-01-15T) and timezone offset (+01:00)
+              const agencyDate = agencyNowWithOffset.substring(0, 11)
+              const agencyOffset = agencyNowWithOffset.substring(19)
+
+              // Build time string (16:46:00)
+              const timeStr = `${actualHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${(seconds || 0).toString().padStart(2, '0')}`
+
+              // Combine to create ISO string in agency timezone (e.g., "2024-01-15T16:46:00+01:00")
+              const departureISOString = `${agencyDate}${timeStr}${agencyOffset}`
+
+              // Parse as Date - this correctly interprets the timezone offset
+              const departureDate = new Date(departureISOString)
 
               // Add departure
               group.departures.push({
