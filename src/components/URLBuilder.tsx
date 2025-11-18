@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { DepartureBoard } from './DepartureBoard'
+import { StopSelector } from './StopSelector'
 import { AppConfig } from '../types'
 
 interface Preset {
@@ -9,11 +10,98 @@ interface Preset {
 
 const presets: Preset[] = [
   {
-    name: 'Car Jaune Example',
+    name: 'Car Jaune',
     config: {
       gtfsUrl: 'https://pysae.com/api/v2/groups/car-jaune/gtfs/pub',
       gtfsRtUrls: ['https://pysae.com/api/v2/groups/car-jaune/gtfs-rt'],
       stopIds: ['1001', '1002'],
+      showAlerts: true,
+      refreshInterval: 20
+    }
+  },
+  {
+    name: 'Irigo',
+    config: {
+      gtfsUrl: 'https://chouette.enroute.mobi/api/v1/datas/Irigo/gtfs.zip',
+      gtfsRtUrls: [
+        'https://ara-api.enroute.mobi/irigo/gtfs/trip-updates',
+        'https://ara-api.enroute.mobi/irigo/gtfs/vehicle-positions',
+        'https://notify.ratpdev.com/api/networks/RD%20ANGERS/alerts/gtfsrt'
+      ],
+      showAlerts: true,
+      refreshInterval: 20
+    }
+  },
+  {
+    name: "Kar'Ouest",
+    config: {
+      gtfsUrl: 'https://www.data.gouv.fr/api/1/datasets/r/c9c2f609-d0cd-4233-ad1b-cf86b9bf2dc8',
+      gtfsRtUrls: ['https://pysae.com/api/v2/groups/semto-2/gtfs-rt'],
+      showAlerts: true,
+      refreshInterval: 20
+    }
+  },
+  {
+    name: 'Alternéo',
+    config: {
+      gtfsUrl: 'https://transport.data.gouv.fr/resources/80676/download',
+      gtfsRtUrls: [
+        'https://proxy.transport.data.gouv.fr/resource/alterneo-civis-gtfs-rt-trip-update',
+        'https://proxy.transport.data.gouv.fr/resource/alterneo-civis-gtfs-rt-service-alert',
+        'https://proxy.transport.data.gouv.fr/resource/alterneo-civis-gtfs-rt-vehicle-position'
+      ],
+      showAlerts: true,
+      refreshInterval: 20
+    }
+  },
+  {
+    name: 'CaRsud',
+    config: {
+      gtfsUrl: 'https://www.data.gouv.fr/api/1/datasets/r/8f3642e3-9fc3-45ed-af46-8c532966ace3',
+      gtfsRtUrls: ['https://zenbus.net/gtfs/rt/poll.proto?src=true&dataset=carsud-reunion'],
+      showAlerts: true,
+      refreshInterval: 20
+    }
+  },
+  {
+    name: 'Citalis',
+    config: {
+      gtfsUrl: 'https://pysae.com/api/v2/groups/citalis/gtfs/pub',
+      gtfsRtUrls: ['https://pysae.com/api/v2/groups/citalis/gtfs-rt'],
+      showAlerts: true,
+      refreshInterval: 20
+    }
+  },
+  {
+    name: 'STAS',
+    config: {
+      gtfsUrl: 'https://api-preprod.saint-etienne-metropole.fr/gtfs-tools/api/gtfs',
+      gtfsRtUrls: ['https://api-preprod.saint-etienne-metropole.fr/gtfs-tools/api/TripUpdate?format=pb'],
+      showAlerts: true,
+      refreshInterval: 20
+    }
+  },
+  {
+    name: 'Astuce',
+    config: {
+      gtfsUrl: 'https://api.mrn.cityway.fr/dataflow/offre-tc/download?provider=ASTUCE&dataFormat=gtfs&dataProfil=ASTUCE',
+      gtfsRtUrls: [
+        'https://api.mrn.cityway.fr/dataflow/vehicle-tc-tr/download?provider=TCAR&dataFormat=gtfs-rt',
+        'https://api.mrn.cityway.fr/dataflow/info-transport/download?provider=ASTUCE&dataFormat=gtfs-rt',
+        'https://api.mrn.cityway.fr/dataflow/vehicule-tc-tr/download?provider=TNI&dataFormat=gtfs-rt',
+        'https://api.mrn.cityway.fr/dataflow/horaire-tc-tr/download?provider=TNI&dataFormat=gtfs-rt',
+        'https://api.mrn.cityway.fr/dataflow/horaire-tc-tr/download?provider=TAE&dataFormat=gtfs-rt',
+        'https://api.mrn.cityway.fr/dataflow/horaire-tc-tr/download?provider=TCAR&dataFormat=gtfs-rt'
+      ],
+      showAlerts: true,
+      refreshInterval: 20
+    }
+  },
+  {
+    name: 'MAP',
+    config: {
+      gtfsUrl: 'https://www.data.gouv.fr/api/1/datasets/r/3bd31fbe-93f4-432d-ade7-ee8d69897880',
+      gtfsRtUrls: ['https://proxy.transport.data.gouv.fr/resource/mat-saint-malo-gtfs-rt-trip-update'],
       showAlerts: true,
       refreshInterval: 20
     }
@@ -27,6 +115,7 @@ export const URLBuilder: React.FC = () => {
   const [showAlerts, setShowAlerts] = useState(false)
   const [refreshInterval, setRefreshInterval] = useState('20')
   const [showPreview, setShowPreview] = useState(false)
+  const [showStopSelector, setShowStopSelector] = useState(false)
 
   const buildUrl = (): string => {
     const params = new URLSearchParams()
@@ -66,6 +155,21 @@ export const URLBuilder: React.FC = () => {
 
   const handleGoToUrl = () => {
     window.location.href = buildUrl()
+  }
+
+  const handleSelectStops = (selectedStopIds: string[]) => {
+    // Append to existing stops
+    const existingStops = stopIds ? stopIds.split(',').map(s => s.trim()).filter(Boolean) : []
+    const newStops = [...new Set([...existingStops, ...selectedStopIds])]
+    setStopIds(newStops.join(', '))
+  }
+
+  const handleOpenStopSelector = () => {
+    if (!gtfsUrl) {
+      alert('Please enter a GTFS URL first')
+      return
+    }
+    setShowStopSelector(true)
   }
 
   const isValid = gtfsUrl && stopIds
@@ -128,13 +232,22 @@ export const URLBuilder: React.FC = () => {
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Stop IDs <span className="text-red-500">*</span>
               </label>
-              <input
-                type="text"
-                value={stopIds}
-                onChange={(e) => setStopIds(e.target.value)}
-                placeholder="1001, 1002, 1003"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              />
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={stopIds}
+                  onChange={(e) => setStopIds(e.target.value)}
+                  placeholder="1001, 1002, 1003"
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                />
+                <button
+                  type="button"
+                  onClick={handleOpenStopSelector}
+                  className="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors whitespace-nowrap"
+                >
+                  Browse Stops
+                </button>
+              </div>
               <p className="text-xs text-gray-500 mt-1">Comma-separated stop IDs from your GTFS feed</p>
             </div>
 
@@ -232,6 +345,15 @@ export const URLBuilder: React.FC = () => {
               <DepartureBoard config={getConfig()} />
             </div>
           </div>
+        )}
+
+        {/* Stop Selector Modal */}
+        {showStopSelector && (
+          <StopSelector
+            gtfsUrl={gtfsUrl}
+            onSelectStops={handleSelectStops}
+            onClose={() => setShowStopSelector(false)}
+          />
         )}
       </div>
     </div>
