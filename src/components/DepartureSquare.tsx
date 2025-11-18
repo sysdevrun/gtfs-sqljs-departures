@@ -22,8 +22,9 @@ export const DepartureSquare: React.FC<DepartureSquareProps> = ({
   return (
     <div
       className={`
+        adaptive-departure-square ${showTechnicalDetails && tripShortName ? 'with-tech' : ''}
         relative flex flex-col items-center justify-center
-        min-w-[5rem] ${showTechnicalDetails && tripShortName ? 'h-24' : 'h-20'} rounded-lg shadow-md
+        min-w-[5rem] rounded-lg shadow-md
         ${isRealtime ? 'bg-green-700 text-white' : 'bg-gray-600 text-white'}
       `}
     >
