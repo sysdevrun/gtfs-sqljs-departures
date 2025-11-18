@@ -43,7 +43,8 @@ export const useGtfs = (gtfsUrl?: string, gtfsRtUrls: string[] = []): UseGtfsRes
               setProgress(progress)
             }
           },
-          realtimeFeedUrls: gtfsRtUrls.length > 0 ? gtfsRtUrls.map(proxyUrl) : undefined
+          realtimeFeedUrls: gtfsRtUrls.length > 0 ? gtfsRtUrls.map(proxyUrl) : undefined,
+          skipFiles: ['fare_attributes.txt', 'shapes.txt']
         })
 
         if (!mounted) return
