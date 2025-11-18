@@ -29,9 +29,6 @@ export const DepartureRow: React.FC<DepartureRowProps> = ({ group, timezone, now
         <div className="font-semibold text-gray-800 truncate">
           {headsign}
         </div>
-        <div className="text-sm text-gray-500">
-          Direction {group.directionId}
-        </div>
       </div>
 
       <div className="flex gap-2">
