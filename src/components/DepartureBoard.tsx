@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { format } from 'date-fns'
 import { DepartureRow } from './DepartureRow'
 import { AlertsPanel } from './AlertsPanel'
 import { SplashScreen } from './SplashScreen'
@@ -20,7 +21,7 @@ export const DepartureBoard: React.FC<DepartureBoardProps> = ({ config }) => {
     config.gtfsRtUrls
   )
 
-  const { groups, timezone, loading: departuresLoading } = useDepartures(
+  const { groups, timezone } = useDepartures(
     gtfs,
     config.stopIds,
     refreshTrigger
@@ -67,15 +68,11 @@ export const DepartureBoard: React.FC<DepartureBoardProps> = ({ config }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50">
       <div className="container mx-auto p-4">
-        <header className="mb-6">
-          <h1 className="text-4xl font-bold text-primary-700 mb-2">
-            Departure Board
-          </h1>
-          <div className="text-sm text-gray-600">
-            Refreshing every {config.refreshInterval} seconds
-            {departuresLoading && ' • Updating...'}
+        <div className="flex justify-end mb-4">
+          <div className="text-2xl font-bold text-primary-700">
+            {format(now, 'HH:mm')}
           </div>
-        </header>
+        </div>
 
         <div className={`flex flex-col ${config.showAlerts ? 'lg:flex-row' : ''} gap-6`}>
           <div className={config.showAlerts ? 'lg:w-2/3' : 'w-full'}>

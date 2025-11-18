@@ -40,20 +40,15 @@ export const useDepartures = (
 
         const routeDirectionMap = new Map<string, RouteDirectionGroup>()
 
-        // For each stop, get all stop times for today
+        // First pass: Get ALL stop times for today to identify all route-direction combinations
         for (const stopId of stopIds) {
-          const stopTimes = gtfs.getStopTimes({
+          const allStopTimes = gtfs.getStopTimes({
             stopId,
             date: currentDate,
             includeRealtime: true
           })
 
-          for (const stopTime of stopTimes) {
-            // Skip if departure has already passed
-            if (stopTime.departure_time < currentTime) {
-              continue
-            }
-
+          for (const stopTime of allStopTimes) {
             const trip = gtfs.getTrips({ tripId: stopTime.trip_id })[0]
             if (!trip) continue
 
@@ -62,6 +57,7 @@ export const useDepartures = (
 
             const key = `${route.route_id}-${trip.direction_id}`
 
+            // Initialize route-direction group if not exists
             if (!routeDirectionMap.has(key)) {
               routeDirectionMap.set(key, {
                 routeId: route.route_id,
@@ -83,28 +79,31 @@ export const useDepartures = (
               group.headsigns.push(trip.trip_headsign)
             }
 
-            // Parse departure time
-            const [hours, minutes, seconds] = stopTime.departure_time.split(':').map(Number)
-            const departureDate = new Date(now)
-            departureDate.setHours(hours >= 24 ? hours - 24 : hours, minutes, seconds || 0, 0)
+            // Only add to departures if it hasn't passed yet
+            if (stopTime.departure_time >= currentTime) {
+              // Parse departure time
+              const [hours, minutes, seconds] = stopTime.departure_time.split(':').map(Number)
+              const departureDate = new Date(now)
+              departureDate.setHours(hours >= 24 ? hours - 24 : hours, minutes, seconds || 0, 0)
 
-            // Add departure
-            group.departures.push({
-              routeId: route.route_id,
-              routeShortName: route.route_short_name || route.route_long_name || route.route_id,
-              routeLongName: route.route_long_name || '',
-              routeColor: route.route_color || 'CCCCCC',
-              routeTextColor: route.route_text_color || '',
-              routeSortOrder: typeof route.route_sort_order === 'number' ? route.route_sort_order : 999999,
-              directionId: trip.direction_id ?? 0,
-              tripHeadsign: trip.trip_headsign || '',
-              stopId,
-              departureTime: departureDate,
-              isRealtime: !!(stopTime as any).delay || !!(stopTime as any).time,
-              delay: (stopTime as any).delay,
-              isLastDeparture: false, // Will be set later
-              tripId: stopTime.trip_id
-            })
+              // Add departure
+              group.departures.push({
+                routeId: route.route_id,
+                routeShortName: route.route_short_name || route.route_long_name || route.route_id,
+                routeLongName: route.route_long_name || '',
+                routeColor: route.route_color || 'CCCCCC',
+                routeTextColor: route.route_text_color || '',
+                routeSortOrder: typeof route.route_sort_order === 'number' ? route.route_sort_order : 999999,
+                directionId: trip.direction_id ?? 0,
+                tripHeadsign: trip.trip_headsign || '',
+                stopId,
+                departureTime: departureDate,
+                isRealtime: !!(stopTime as any).delay || !!(stopTime as any).time,
+                delay: (stopTime as any).delay,
+                isLastDeparture: false, // Will be set later
+                tripId: stopTime.trip_id
+              })
+            }
           }
         }
 
