@@ -4,6 +4,7 @@ A real-time transit departure board built with Vite, React, TypeScript, and Tail
 
 ## Features
 
+- **URL Builder**: Interactive form to build configuration URLs with live preview
 - **Real-time Departures**: Shows upcoming departures for multiple stops with GTFS-RT integration
 - **Route Display**: Route icons with GTFS-defined colors and text
 - **Smart Time Display**: Shows minutes for departures < 60 minutes, HH:MM format otherwise
@@ -22,9 +23,10 @@ gtfs-sqljs-departures/
 │   │   ├── DepartureBoard.tsx    # Main departure board container
 │   │   ├── DepartureRow.tsx      # Individual route departure row
 │   │   ├── DepartureSquare.tsx   # Departure time display
-│   │   ├── HelpMessage.tsx       # URL parameter help screen
+│   │   ├── HelpMessage.tsx       # URL parameter help screen (legacy)
 │   │   ├── RouteIcon.tsx         # Route badge with GTFS colors
-│   │   └── SplashScreen.tsx      # Loading screen
+│   │   ├── SplashScreen.tsx      # Loading screen
+│   │   └── URLBuilder.tsx        # Interactive URL builder with preview
 │   ├── hooks/
 │   │   ├── useAlerts.ts          # Alerts data fetching
 │   │   ├── useDepartures.ts      # Departure data processing
@@ -47,6 +49,18 @@ gtfs-sqljs-departures/
 └── package.json
 ```
 
+## URL Builder
+
+The application includes an interactive URL builder that makes it easy to configure your departure board:
+
+- **Access**: Navigate to the site without parameters or add `?builder` to any URL
+- **Features**:
+  - Form-based configuration with validation
+  - Quick start presets (e.g., Car Jaune)
+  - Live preview of the departure board
+  - Copy generated URL to clipboard
+  - Navigate directly to configured departure board
+
 ## URL Parameters
 
 The application is configured entirely through URL parameters:
@@ -61,6 +75,7 @@ The application is configured entirely through URL parameters:
 - `gtfsRtUrls` - Comma-separated GTFS-RT feed URLs for realtime updates
 - `showAlerts` - Set to `true` to display the alerts panel
 - `refresh` - Refresh interval in seconds (default: 20)
+- `builder` - Show the URL builder interface
 
 ### Example URL
 
