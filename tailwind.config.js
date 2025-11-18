@@ -8,28 +8,28 @@ export default {
     extend: {
       colors: {
         primary: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6', // Main blue
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
+          50: 'rgb(var(--primary-color-rgb) / 0.1)',
+          100: 'rgb(var(--primary-color-rgb) / 0.2)',
+          200: 'rgb(var(--primary-color-rgb) / 0.3)',
+          300: 'rgb(var(--primary-color-rgb) / 0.5)',
+          400: 'rgb(var(--primary-color-rgb) / 0.7)',
+          500: 'var(--primary-color)', // Main color from CSS variable
+          600: 'rgb(var(--primary-color-rgb) / 1.2)',
+          700: 'rgb(var(--primary-color-rgb) / 1.5)',
+          800: 'rgb(var(--primary-color-rgb) / 1.7)',
+          900: 'rgb(var(--primary-color-rgb) / 2)',
         },
         secondary: {
-          50: '#fff7ed',
-          100: '#ffedd5',
-          200: '#fed7aa',
-          300: '#fdba74',
-          400: '#fb923c',
-          500: '#f97316', // Main orange
-          600: '#ea580c',
-          700: '#c2410c',
-          800: '#9a3412',
-          900: '#7c2d12',
+          50: 'rgb(var(--secondary-color-rgb) / 0.1)',
+          100: 'rgb(var(--secondary-color-rgb) / 0.2)',
+          200: 'rgb(var(--secondary-color-rgb) / 0.3)',
+          300: 'rgb(var(--secondary-color-rgb) / 0.5)',
+          400: 'rgb(var(--secondary-color-rgb) / 0.7)',
+          500: 'var(--secondary-color)', // Main color from CSS variable
+          600: 'rgb(var(--secondary-color-rgb) / 1.2)',
+          700: 'rgb(var(--secondary-color-rgb) / 1.5)',
+          800: 'rgb(var(--secondary-color-rgb) / 1.7)',
+          900: 'rgb(var(--secondary-color-rgb) / 2)',
         },
       },
     },

@@ -23,8 +23,17 @@ export const DepartureBoard: React.FC<DepartureBoardProps> = ({ config }) => {
 
   // Set CSS custom properties for dynamic theming
   useEffect(() => {
+    const hexToRgb = (hex: string) => {
+      const r = parseInt(hex.substring(0, 2), 16)
+      const g = parseInt(hex.substring(2, 4), 16)
+      const b = parseInt(hex.substring(4, 6), 16)
+      return `${r} ${g} ${b}`
+    }
+
     document.documentElement.style.setProperty('--primary-color', `#${config.primaryColor}`)
+    document.documentElement.style.setProperty('--primary-color-rgb', hexToRgb(config.primaryColor))
     document.documentElement.style.setProperty('--secondary-color', `#${config.secondaryColor}`)
+    document.documentElement.style.setProperty('--secondary-color-rgb', hexToRgb(config.secondaryColor))
   }, [config.primaryColor, config.secondaryColor])
 
   const { gtfs, loading: gtfsLoading, error: gtfsError, progress } = useGtfs(

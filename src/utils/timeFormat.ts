@@ -20,7 +20,7 @@ export const formatDepartureTime = (
   if (minutesUntil <= 59) {
     // Show minutes with HH:MM below
     return {
-      display: `${minutesUntil}'`,
+      display: `${minutesUntil} min.`,
       subDisplay: format(zonedDeparture, 'HH:mm'),
       isMinutes: true
     }
