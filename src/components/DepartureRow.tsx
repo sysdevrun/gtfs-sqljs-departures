@@ -47,22 +47,17 @@ export const DepartureRow: React.FC<DepartureRowProps> = ({ group, timezone, now
         />
       </div>
 
-      {/* Headsign and trip details */}
+      {/* Headsign */}
       <div className="flex-grow min-w-0">
         <div className="font-semibold text-gray-800 truncate">
           {headsign}
         </div>
-        {showTechnicalDetails && tripShortName && (
-          <div className="text-xs text-gray-500 mt-1">
-            Trip: {tripShortName}
-          </div>
-        )}
       </div>
 
       {/* Departure times */}
       <div className="flex gap-2">
         {upcomingDepartures.length === 0 ? (
-          <div className="flex items-center justify-center min-w-[10rem] h-20 rounded-lg bg-gray-100 text-gray-500 text-sm px-4">
+          <div className={`flex items-center justify-center min-w-[10rem] ${showTechnicalDetails ? 'h-24' : 'h-20'} rounded-lg bg-gray-100 text-gray-500 text-sm px-4`}>
             {t('departureBoard.noMoreDepartures')}
           </div>
         ) : (
@@ -73,10 +68,12 @@ export const DepartureRow: React.FC<DepartureRowProps> = ({ group, timezone, now
                 time={formatDepartureTime(departure.departureTime, timezone, now)}
                 isRealtime={departure.isRealtime}
                 isLastDeparture={departure.isLastDeparture}
+                tripShortName={departure.tripShortName}
+                showTechnicalDetails={showTechnicalDetails}
               />
             ))}
             {upcomingDepartures.length === 1 && (
-              <div className="min-w-[5rem] h-20 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 text-xs">
+              <div className={`min-w-[5rem] ${showTechnicalDetails ? 'h-24' : 'h-20'} rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 text-xs`}>
                 -
               </div>
             )}

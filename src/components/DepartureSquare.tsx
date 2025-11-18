@@ -6,12 +6,16 @@ interface DepartureSquareProps {
   time: FormattedTime
   isRealtime: boolean
   isLastDeparture: boolean
+  tripShortName?: string
+  showTechnicalDetails: boolean
 }
 
 export const DepartureSquare: React.FC<DepartureSquareProps> = ({
   time,
   isRealtime,
-  isLastDeparture
+  isLastDeparture,
+  tripShortName,
+  showTechnicalDetails
 }) => {
   const { t } = useTranslation()
 
@@ -19,21 +23,21 @@ export const DepartureSquare: React.FC<DepartureSquareProps> = ({
     <div
       className={`
         relative flex flex-col items-center justify-center
-        min-w-[5rem] h-20 rounded-lg shadow-md
-        ${isRealtime ? 'bg-primary-500 text-white' : 'bg-gray-200 text-gray-800'}
+        min-w-[5rem] ${showTechnicalDetails && tripShortName ? 'h-24' : 'h-20'} rounded-lg shadow-md
+        ${isRealtime ? 'bg-green-700 text-white' : 'bg-gray-600 text-white'}
       `}
     >
-      {isRealtime && (
-        <div className="absolute -top-1 -left-1 bg-green-500 text-white text-[0.55rem] px-1.5 py-0.5 rounded font-bold">
-          RT
-        </div>
-      )}
       <div className={`text-2xl font-bold ${time.isMinutes ? 'mb-1' : ''}`}>
         {time.display}
       </div>
       {time.subDisplay && (
-        <div className="text-xs opacity-80">
+        <div className="text-xs opacity-90">
           {time.subDisplay}
+        </div>
+      )}
+      {showTechnicalDetails && tripShortName && (
+        <div className="text-[0.6rem] opacity-80 mt-1">
+          {tripShortName}
         </div>
       )}
       {isLastDeparture && (
