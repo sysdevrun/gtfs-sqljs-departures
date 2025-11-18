@@ -9,12 +9,14 @@ interface DepartureRowProps {
   group: RouteDirectionGroup
   timezone: string
   now: Date
+  showTechnicalDetails: boolean
 }
 
-export const DepartureRow: React.FC<DepartureRowProps> = ({ group, timezone, now }) => {
+export const DepartureRow: React.FC<DepartureRowProps> = ({ group, timezone, now, showTechnicalDetails }) => {
   const { t } = useTranslation()
   const headsign = group.headsigns[0] || 'Unknown Destination'
   const upcomingDepartures = group.departures.slice(0, 2)
+  const tripShortName = upcomingDepartures[0]?.tripShortName || ''
 
   return (
     <div className="flex items-center gap-4 p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200">
@@ -31,6 +33,11 @@ export const DepartureRow: React.FC<DepartureRowProps> = ({ group, timezone, now
         <div className="font-semibold text-gray-800 truncate">
           {headsign}
         </div>
+        {showTechnicalDetails && tripShortName && (
+          <div className="text-xs text-gray-500 mt-1">
+            Trip: {tripShortName}
+          </div>
+        )}
       </div>
 
       <div className="flex gap-2">
