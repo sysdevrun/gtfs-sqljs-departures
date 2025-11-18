@@ -146,6 +146,7 @@ npm preview
 
 1. **URL Parsing** (`urlParams.ts`): Extracts configuration from URL parameters
 2. **GTFS Loading** (`useGtfs.ts`): Loads GTFS static data and GTFS-RT feeds via proxy
+   - Skips `fare_attributes.txt` and `shapes.txt` for faster loading
 3. **Departure Processing** (`useDepartures.ts`):
    - Fetches stop times for current day
    - Joins with trips and routes data
