@@ -27,11 +27,11 @@ export const DepartureSquare: React.FC<DepartureSquareProps> = ({
         ${isRealtime ? 'bg-green-700 text-white' : 'bg-gray-600 text-white'}
       `}
     >
-      <div className={`text-2xl font-bold ${time.isMinutes ? 'mb-1' : ''}`}>
+      <div className={`font-bold ${time.isMinutes ? 'text-xl mb-1' : 'text-2xl'}`}>
         {time.display}
       </div>
       {time.subDisplay && (
-        <div className="text-xs opacity-90">
+        <div className="text-sm opacity-90">
           {time.subDisplay}
         </div>
       )}
