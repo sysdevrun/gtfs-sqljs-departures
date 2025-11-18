@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DepartureBoard } from './DepartureBoard'
 import { StopSelector } from './StopSelector'
+import { TransportDatasetSearch } from './TransportDatasetSearch'
 import { LanguageSelector } from './LanguageSelector'
 import { AppConfig } from '../types'
 
@@ -140,6 +141,7 @@ export const URLBuilder: React.FC = () => {
   const [secondaryColor, setSecondaryColor] = useState(stored?.secondaryColor || 'f97316')
   const [showPreview, setShowPreview] = useState(false)
   const [showStopSelector, setShowStopSelector] = useState(false)
+  const [showDatasetSearch, setShowDatasetSearch] = useState(false)
 
   // Save to localStorage whenever values change
   React.useEffect(() => {
@@ -219,6 +221,13 @@ export const URLBuilder: React.FC = () => {
     setShowStopSelector(true)
   }
 
+  const handleSelectDataset = (selectedGtfsUrl: string, selectedGtfsRtUrls: string[]) => {
+    setGtfsUrl(selectedGtfsUrl)
+    setGtfsRtUrls(selectedGtfsRtUrls.join(', '))
+    // Clear stop IDs when switching datasets
+    setStopIds('')
+  }
+
   const isValid = gtfsUrl && stopIds
 
   return (
@@ -246,6 +255,20 @@ export const URLBuilder: React.FC = () => {
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* Dataset Search Button */}
+          <div className="mb-6">
+            <button
+              onClick={() => setShowDatasetSearch(true)}
+              className="w-full px-6 py-4 bg-gradient-to-r from-primary-500 to-secondary-500 text-white rounded-lg hover:from-primary-600 hover:to-secondary-600 transition-all shadow-md hover:shadow-lg font-semibold text-lg"
+            >
+              🇫🇷 {t('urlBuilder.searchFrenchDatasets')}
+            </button>
+          </div>
+
+          <div className="mb-6 text-center text-gray-500 text-sm">
+            {t('urlBuilder.orManualEntry')}
           </div>
 
           {/* Form */}
@@ -468,6 +491,14 @@ export const URLBuilder: React.FC = () => {
             gtfsUrl={gtfsUrl}
             onSelectStops={handleSelectStops}
             onClose={() => setShowStopSelector(false)}
+          />
+        )}
+
+        {/* Dataset Search Modal */}
+        {showDatasetSearch && (
+          <TransportDatasetSearch
+            onSelectDataset={handleSelectDataset}
+            onClose={() => setShowDatasetSearch(false)}
           />
         )}
       </div>

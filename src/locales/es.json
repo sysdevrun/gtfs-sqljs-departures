@@ -5,6 +5,8 @@
   "urlBuilder": {
     "title": "Tablero de Salidas GTFS - Constructor de URL",
     "quickStart": "Preajustes de Inicio Rápido",
+    "searchFrenchDatasets": "Buscar Conjuntos de Datos de Transporte Francés",
+    "orManualEntry": "— o ingresar manualmente —",
     "gtfsUrl": "URL GTFS",
     "gtfsUrlPlaceholder": "https://ejemplo.com/gtfs.zip",
     "gtfsUrlHelp": "URL del feed GTFS estático (archivo ZIP)",
@@ -70,5 +72,16 @@
     "fr": "Français",
     "es": "Español",
     "de": "Deutsch"
+  },
+  "datasetSearch": {
+    "title": "Buscar Conjuntos de Datos de Transporte Francés",
+    "searchPlaceholder": "Buscar por nombre de red, área u operador...",
+    "loading": "Cargando conjuntos de datos...",
+    "error": "Error al cargar conjuntos de datos",
+    "noResults": "No se encontraron conjuntos de datos",
+    "datasetsFound": "{{count}} conjunto de datos encontrado",
+    "datasetsFound_plural": "{{count}} conjuntos de datos encontrados",
+    "coverage": "Cobertura",
+    "selectDataset": "Usar este Conjunto de Datos"
   }
 }

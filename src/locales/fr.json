@@ -5,6 +5,8 @@
   "urlBuilder": {
     "title": "Tableau des Départs GTFS - Générateur d'URL",
     "quickStart": "Préréglages de Démarrage Rapide",
+    "searchFrenchDatasets": "Rechercher des Jeux de Données Transport Français",
+    "orManualEntry": "— ou saisir manuellement —",
     "gtfsUrl": "URL GTFS",
     "gtfsUrlPlaceholder": "https://exemple.com/gtfs.zip",
     "gtfsUrlHelp": "URL vers le flux GTFS statique (fichier ZIP)",
@@ -70,5 +72,16 @@
     "fr": "Français",
     "es": "Español",
     "de": "Deutsch"
+  },
+  "datasetSearch": {
+    "title": "Rechercher des Jeux de Données Transport Français",
+    "searchPlaceholder": "Rechercher par nom de réseau, zone ou opérateur...",
+    "loading": "Chargement des jeux de données...",
+    "error": "Erreur lors du chargement des jeux de données",
+    "noResults": "Aucun jeu de données trouvé",
+    "datasetsFound": "{{count}} jeu de données trouvé",
+    "datasetsFound_plural": "{{count}} jeux de données trouvés",
+    "coverage": "Couverture",
+    "selectDataset": "Utiliser ce Jeu de Données"
   }
 }
