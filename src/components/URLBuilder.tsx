@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DepartureBoard } from './DepartureBoard'
 import { StopSelector } from './StopSelector'
+import { LanguageSelector } from './LanguageSelector'
 import { AppConfig } from '../types'
 
 interface Preset {
@@ -110,7 +111,7 @@ const presets: Preset[] = [
 ]
 
 export const URLBuilder: React.FC = () => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [gtfsUrl, setGtfsUrl] = useState('')
   const [gtfsRtUrls, setGtfsRtUrls] = useState('')
   const [stopIds, setStopIds] = useState('')
@@ -126,6 +127,7 @@ export const URLBuilder: React.FC = () => {
     if (stopIds) params.set('stops', stopIds)
     if (showAlerts) params.set('showAlerts', 'true')
     if (refreshInterval) params.set('refresh', refreshInterval)
+    params.set('lang', i18n.language)
 
     return `${window.location.origin}${window.location.pathname}?${params.toString()}`
   }
@@ -180,9 +182,12 @@ export const URLBuilder: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50">
       <div className="container mx-auto p-4 max-w-6xl">
         <div className="bg-white rounded-lg shadow-2xl p-8 mb-6">
-          <h1 className="text-4xl font-bold text-primary-700 mb-6">
-            {t('urlBuilder.title')}
-          </h1>
+          <div className="flex justify-between items-start mb-6">
+            <h1 className="text-4xl font-bold text-primary-700">
+              {t('urlBuilder.title')}
+            </h1>
+            <LanguageSelector />
+          </div>
 
           {/* Presets */}
           <div className="mb-6">
