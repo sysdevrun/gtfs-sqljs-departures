@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { FormattedTime } from '../utils/timeFormat'
 
 interface DepartureSquareProps {
@@ -12,6 +13,8 @@ export const DepartureSquare: React.FC<DepartureSquareProps> = ({
   isRealtime,
   isLastDeparture
 }) => {
+  const { t } = useTranslation()
+
   return (
     <div
       className={`
@@ -30,7 +33,7 @@ export const DepartureSquare: React.FC<DepartureSquareProps> = ({
       )}
       {isLastDeparture && (
         <div className="absolute -top-1 -right-1 bg-secondary-500 text-white text-[0.6rem] px-1 rounded">
-          LAST
+          {t('departureBoard.lastDeparture')}
         </div>
       )}
     </div>

@@ -1,23 +1,19 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface SplashScreenProps {
   message?: string
 }
 
-const funMessages = [
-  "Calculating optimal departure angles... 🚌",
-  "Synchronizing with the transit gods... ⏰",
-  "Decoding GTFS hieroglyphics... 📜",
-  "Warming up the departure engines... 🚀",
-  "Loading routes from the cloud... ☁️",
-  "Teaching buses to tell time... 🕐",
-  "Organizing chaos into schedules... 📊"
-]
-
 export const SplashScreen: React.FC<SplashScreenProps> = ({ message }) => {
-  const [funMessage] = React.useState(() =>
-    funMessages[Math.floor(Math.random() * funMessages.length)]
-  )
+  const { t } = useTranslation()
+
+  const [funMessageKey] = React.useState(() => {
+    const keys = ['1', '2', '3', '4', '5', '6', '7']
+    return keys[Math.floor(Math.random() * keys.length)]
+  })
+
+  const funMessage = t(`splash.messages.${funMessageKey}`)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center p-4">
@@ -26,7 +22,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ message }) => {
           <div className="inline-block animate-spin rounded-full h-16 w-16 border-b-4 border-white"></div>
         </div>
         <h1 className="text-4xl font-bold text-white mb-4">
-          GTFS Departure Board
+          {t('splash.title')}
         </h1>
         <p className="text-white text-xl mb-2">
           {message || funMessage}

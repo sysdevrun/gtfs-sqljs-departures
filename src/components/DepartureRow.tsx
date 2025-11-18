@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { RouteIcon } from './RouteIcon'
 import { DepartureSquare } from './DepartureSquare'
 import { RouteDirectionGroup } from '../types'
@@ -11,6 +12,7 @@ interface DepartureRowProps {
 }
 
 export const DepartureRow: React.FC<DepartureRowProps> = ({ group, timezone, now }) => {
+  const { t } = useTranslation()
   const headsign = group.headsigns[0] || 'Unknown Destination'
   const upcomingDepartures = group.departures.slice(0, 2)
 
@@ -34,7 +36,7 @@ export const DepartureRow: React.FC<DepartureRowProps> = ({ group, timezone, now
       <div className="flex gap-2">
         {upcomingDepartures.length === 0 ? (
           <div className="flex items-center justify-center min-w-[10rem] h-20 rounded-lg bg-gray-100 text-gray-500 text-sm px-4">
-            No more departures today
+            {t('departureBoard.noMoreDepartures')}
           </div>
         ) : (
           <>

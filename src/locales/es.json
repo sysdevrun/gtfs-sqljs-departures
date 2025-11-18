@@ -1,0 +1,74 @@
+{
+  "app": {
+    "title": "Tablero de Salidas GTFS"
+  },
+  "urlBuilder": {
+    "title": "Tablero de Salidas GTFS - Constructor de URL",
+    "quickStart": "Preajustes de Inicio Rápido",
+    "gtfsUrl": "URL GTFS",
+    "gtfsUrlPlaceholder": "https://ejemplo.com/gtfs.zip",
+    "gtfsUrlHelp": "URL del feed GTFS estático (archivo ZIP)",
+    "gtfsRtUrls": "URLs GTFS-RT (Opcional)",
+    "gtfsRtUrlsPlaceholder": "https://ejemplo.com/gtfs-rt, https://ejemplo.com/gtfs-rt-2",
+    "gtfsRtUrlsHelp": "URLs de feeds GTFS en Tiempo Real separadas por comas",
+    "stopIds": "IDs de Paradas",
+    "stopIdsPlaceholder": "1001, 1002, 1003",
+    "stopIdsHelp": "IDs de paradas separados por comas de su feed GTFS",
+    "browseStops": "Explorar Paradas",
+    "refreshInterval": "Intervalo de Actualización (segundos)",
+    "showAlerts": "Mostrar Alertas",
+    "generatedUrl": "URL Generada",
+    "copy": "Copiar",
+    "previewBelow": "Vista Previa Abajo",
+    "goToDepartureBoard": "Ir al Tablero de Salidas",
+    "livePreview": "Vista Previa en Vivo",
+    "hidePreview": "Ocultar Vista Previa",
+    "required": "*"
+  },
+  "stopSelector": {
+    "title": "Seleccionar Paradas",
+    "loading": "Cargando datos GTFS...",
+    "searchPlaceholder": "Buscar paradas por nombre, ID o código...",
+    "stopsFound": "{{count}} parada encontrada",
+    "stopsFound_plural": "{{count}} paradas encontradas",
+    "selected": "{{count}} seleccionada",
+    "cancel": "Cancelar",
+    "addStops": "Agregar {{count}} Parada",
+    "addStops_plural": "Agregar {{count}} Paradas",
+    "stopId": "ID: {{id}}",
+    "stopCode": "Código: {{code}}",
+    "close": "×",
+    "noGtfsUrl": "Por favor, ingrese primero una URL GTFS"
+  },
+  "departureBoard": {
+    "loading": "Cargando datos GTFS... {{progress}}%",
+    "error": "Error",
+    "noDepartures": "No se encontraron salidas para las paradas seleccionadas",
+    "noMoreDepartures": "No hay más salidas hoy",
+    "lastDeparture": "ÚLTIMA",
+    "minutes": "{{count}}'",
+    "currentTime": "Hora actual"
+  },
+  "alerts": {
+    "noAlerts": "No hay alertas activas"
+  },
+  "splash": {
+    "title": "Tablero de Salidas GTFS",
+    "messages": {
+      "1": "Calculando ángulos óptimos de salida... 🚌",
+      "2": "Sincronizando con los dioses del transporte... ⏰",
+      "3": "Decodificando jeroglíficos GTFS... 📜",
+      "4": "Calentando los motores de salida... 🚀",
+      "5": "Cargando rutas desde la nube... ☁️",
+      "6": "Enseñando a los buses a decir la hora... 🕐",
+      "7": "Organizando el caos en horarios... 📊"
+    }
+  },
+  "language": {
+    "selector": "Idioma",
+    "en": "English",
+    "fr": "Français",
+    "es": "Español",
+    "de": "Deutsch"
+  }
+}

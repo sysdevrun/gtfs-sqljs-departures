@@ -1,0 +1,74 @@
+{
+  "app": {
+    "title": "GTFS Departure Board"
+  },
+  "urlBuilder": {
+    "title": "GTFS Departure Board - URL Builder",
+    "quickStart": "Quick Start Presets",
+    "gtfsUrl": "GTFS URL",
+    "gtfsUrlPlaceholder": "https://example.com/gtfs.zip",
+    "gtfsUrlHelp": "URL to GTFS static feed (ZIP file)",
+    "gtfsRtUrls": "GTFS-RT URLs (Optional)",
+    "gtfsRtUrlsPlaceholder": "https://example.com/gtfs-rt, https://example.com/gtfs-rt-2",
+    "gtfsRtUrlsHelp": "Comma-separated GTFS Realtime feed URLs",
+    "stopIds": "Stop IDs",
+    "stopIdsPlaceholder": "1001, 1002, 1003",
+    "stopIdsHelp": "Comma-separated stop IDs from your GTFS feed",
+    "browseStops": "Browse Stops",
+    "refreshInterval": "Refresh Interval (seconds)",
+    "showAlerts": "Show Alerts",
+    "generatedUrl": "Generated URL",
+    "copy": "Copy",
+    "previewBelow": "Preview Below",
+    "goToDepartureBoard": "Go to Departure Board",
+    "livePreview": "Live Preview",
+    "hidePreview": "Hide Preview",
+    "required": "*"
+  },
+  "stopSelector": {
+    "title": "Select Stops",
+    "loading": "Loading GTFS data...",
+    "searchPlaceholder": "Search stops by name, ID, or code...",
+    "stopsFound": "{{count}} stop found",
+    "stopsFound_plural": "{{count}} stops found",
+    "selected": "{{count}} selected",
+    "cancel": "Cancel",
+    "addStops": "Add {{count}} Stop",
+    "addStops_plural": "Add {{count}} Stops",
+    "stopId": "ID: {{id}}",
+    "stopCode": "Code: {{code}}",
+    "close": "×",
+    "noGtfsUrl": "Please enter a GTFS URL first"
+  },
+  "departureBoard": {
+    "loading": "Loading GTFS data... {{progress}}%",
+    "error": "Error",
+    "noDepartures": "No departures found for the selected stops",
+    "noMoreDepartures": "No more departures today",
+    "lastDeparture": "LAST",
+    "minutes": "{{count}}'",
+    "currentTime": "Current time"
+  },
+  "alerts": {
+    "noAlerts": "No active alerts"
+  },
+  "splash": {
+    "title": "GTFS Departure Board",
+    "messages": {
+      "1": "Calculating optimal departure angles... 🚌",
+      "2": "Synchronizing with the transit gods... ⏰",
+      "3": "Decoding GTFS hieroglyphics... 📜",
+      "4": "Warming up the departure engines... 🚀",
+      "5": "Loading routes from the cloud... ☁️",
+      "6": "Teaching buses to tell time... 🕐",
+      "7": "Organizing chaos into schedules... 📊"
+    }
+  },
+  "language": {
+    "selector": "Language",
+    "en": "English",
+    "fr": "Français",
+    "es": "Español",
+    "de": "Deutsch"
+  }
+}

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { format } from 'date-fns'
 import { DepartureRow } from './DepartureRow'
 import { AlertsPanel } from './AlertsPanel'
 import { SplashScreen } from './SplashScreen'
+import { LanguageSelector } from './LanguageSelector'
 import { useGtfs } from '../hooks/useGtfs'
 import { useDepartures } from '../hooks/useDepartures'
 import { useAlerts } from '../hooks/useAlerts'
@@ -13,6 +15,7 @@ interface DepartureBoardProps {
 }
 
 export const DepartureBoard: React.FC<DepartureBoardProps> = ({ config }) => {
+  const { t } = useTranslation()
   const [now, setNow] = useState(new Date())
   const [refreshTrigger, setRefreshTrigger] = useState(0)
 
@@ -51,14 +54,14 @@ export const DepartureBoard: React.FC<DepartureBoardProps> = ({ config }) => {
   }, [gtfs, config.refreshInterval])
 
   if (gtfsLoading) {
-    return <SplashScreen message={`Loading GTFS data... ${Math.round(progress)}%`} />
+    return <SplashScreen message={t('departureBoard.loading', { progress: Math.round(progress) })} />
   }
 
   if (gtfsError) {
     return (
       <div className="min-h-screen bg-red-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-lg shadow-lg p-8 max-w-md">
-          <h2 className="text-2xl font-bold text-red-600 mb-4">Error</h2>
+          <h2 className="text-2xl font-bold text-red-600 mb-4">{t('departureBoard.error')}</h2>
           <p className="text-gray-700">{gtfsError}</p>
         </div>
       </div>
@@ -68,7 +71,8 @@ export const DepartureBoard: React.FC<DepartureBoardProps> = ({ config }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50">
       <div className="container mx-auto p-4">
-        <div className="flex justify-end mb-4">
+        <div className="flex justify-between items-center mb-4">
+          <LanguageSelector />
           <div className="text-2xl font-bold text-primary-700">
             {format(now, 'HH:mm')}
           </div>
@@ -79,7 +83,7 @@ export const DepartureBoard: React.FC<DepartureBoardProps> = ({ config }) => {
             <div className="space-y-3">
               {groups.length === 0 ? (
                 <div className="bg-white rounded-lg shadow p-8 text-center text-gray-500">
-                  No departures found for the selected stops
+                  {t('departureBoard.noDepartures')}
                 </div>
               ) : (
                 groups.map((group) => (

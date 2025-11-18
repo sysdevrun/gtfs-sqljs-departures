@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { DepartureBoard } from './DepartureBoard'
 import { StopSelector } from './StopSelector'
 import { AppConfig } from '../types'
@@ -109,6 +110,7 @@ const presets: Preset[] = [
 ]
 
 export const URLBuilder: React.FC = () => {
+  const { t } = useTranslation()
   const [gtfsUrl, setGtfsUrl] = useState('')
   const [gtfsRtUrls, setGtfsRtUrls] = useState('')
   const [stopIds, setStopIds] = useState('')
@@ -166,7 +168,7 @@ export const URLBuilder: React.FC = () => {
 
   const handleOpenStopSelector = () => {
     if (!gtfsUrl) {
-      alert('Please enter a GTFS URL first')
+      alert(t('stopSelector.noGtfsUrl'))
       return
     }
     setShowStopSelector(true)
@@ -179,12 +181,12 @@ export const URLBuilder: React.FC = () => {
       <div className="container mx-auto p-4 max-w-6xl">
         <div className="bg-white rounded-lg shadow-2xl p-8 mb-6">
           <h1 className="text-4xl font-bold text-primary-700 mb-6">
-            GTFS Departure Board - URL Builder
+            {t('urlBuilder.title')}
           </h1>
 
           {/* Presets */}
           <div className="mb-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-3">Quick Start Presets</h2>
+            <h2 className="text-xl font-semibold text-gray-800 mb-3">{t('urlBuilder.quickStart')}</h2>
             <div className="flex flex-wrap gap-2">
               {presets.map((preset, index) => (
                 <button
@@ -202,42 +204,42 @@ export const URLBuilder: React.FC = () => {
           <div className="space-y-4 mb-6">
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                GTFS URL <span className="text-red-500">*</span>
+                {t('urlBuilder.gtfsUrl')} <span className="text-red-500">{t('urlBuilder.required')}</span>
               </label>
               <input
                 type="text"
                 value={gtfsUrl}
                 onChange={(e) => setGtfsUrl(e.target.value)}
-                placeholder="https://example.com/gtfs.zip"
+                placeholder={t('urlBuilder.gtfsUrlPlaceholder')}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
-              <p className="text-xs text-gray-500 mt-1">URL to GTFS static feed (ZIP file)</p>
+              <p className="text-xs text-gray-500 mt-1">{t('urlBuilder.gtfsUrlHelp')}</p>
             </div>
 
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                GTFS-RT URLs (Optional)
+                {t('urlBuilder.gtfsRtUrls')}
               </label>
               <input
                 type="text"
                 value={gtfsRtUrls}
                 onChange={(e) => setGtfsRtUrls(e.target.value)}
-                placeholder="https://example.com/gtfs-rt, https://example.com/gtfs-rt-2"
+                placeholder={t('urlBuilder.gtfsRtUrlsPlaceholder')}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
-              <p className="text-xs text-gray-500 mt-1">Comma-separated GTFS Realtime feed URLs</p>
+              <p className="text-xs text-gray-500 mt-1">{t('urlBuilder.gtfsRtUrlsHelp')}</p>
             </div>
 
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Stop IDs <span className="text-red-500">*</span>
+                {t('urlBuilder.stopIds')} <span className="text-red-500">{t('urlBuilder.required')}</span>
               </label>
               <div className="flex gap-2">
                 <input
                   type="text"
                   value={stopIds}
                   onChange={(e) => setStopIds(e.target.value)}
-                  placeholder="1001, 1002, 1003"
+                  placeholder={t('urlBuilder.stopIdsPlaceholder')}
                   className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 />
                 <button
@@ -245,16 +247,16 @@ export const URLBuilder: React.FC = () => {
                   onClick={handleOpenStopSelector}
                   className="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors whitespace-nowrap"
                 >
-                  Browse Stops
+                  {t('urlBuilder.browseStops')}
                 </button>
               </div>
-              <p className="text-xs text-gray-500 mt-1">Comma-separated stop IDs from your GTFS feed</p>
+              <p className="text-xs text-gray-500 mt-1">{t('urlBuilder.stopIdsHelp')}</p>
             </div>
 
             <div className="flex items-center gap-4">
               <div className="flex-1">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Refresh Interval (seconds)
+                  {t('urlBuilder.refreshInterval')}
                 </label>
                 <input
                   type="number"
@@ -275,7 +277,7 @@ export const URLBuilder: React.FC = () => {
                   className="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500"
                 />
                 <label htmlFor="showAlerts" className="ml-2 text-sm font-semibold text-gray-700">
-                  Show Alerts
+                  {t('urlBuilder.showAlerts')}
                 </label>
               </div>
             </div>
@@ -284,7 +286,7 @@ export const URLBuilder: React.FC = () => {
           {/* Generated URL */}
           <div className="mb-6">
             <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Generated URL
+              {t('urlBuilder.generatedUrl')}
             </label>
             <div className="flex gap-2">
               <input
@@ -297,7 +299,7 @@ export const URLBuilder: React.FC = () => {
                 onClick={handleCopyUrl}
                 className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
               >
-                Copy
+                {t('urlBuilder.copy')}
               </button>
             </div>
           </div>
@@ -313,7 +315,7 @@ export const URLBuilder: React.FC = () => {
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
               }`}
             >
-              Preview Below
+              {t('urlBuilder.previewBelow')}
             </button>
             <button
               onClick={handleGoToUrl}
@@ -324,7 +326,7 @@ export const URLBuilder: React.FC = () => {
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
               }`}
             >
-              Go to Departure Board
+              {t('urlBuilder.goToDepartureBoard')}
             </button>
           </div>
         </div>
@@ -333,12 +335,12 @@ export const URLBuilder: React.FC = () => {
         {showPreview && isValid && (
           <div className="bg-white rounded-lg shadow-lg p-4">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold text-gray-800">Live Preview</h2>
+              <h2 className="text-2xl font-bold text-gray-800">{t('urlBuilder.livePreview')}</h2>
               <button
                 onClick={() => setShowPreview(false)}
                 className="text-gray-500 hover:text-gray-700"
               >
-                Hide Preview
+                {t('urlBuilder.hidePreview')}
               </button>
             </div>
             <div className="border-t pt-4">

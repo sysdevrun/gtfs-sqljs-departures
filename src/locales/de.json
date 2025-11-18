@@ -1,0 +1,74 @@
+{
+  "app": {
+    "title": "GTFS Abfahrtstafel"
+  },
+  "urlBuilder": {
+    "title": "GTFS Abfahrtstafel - URL-Generator",
+    "quickStart": "Schnellstart-Voreinstellungen",
+    "gtfsUrl": "GTFS-URL",
+    "gtfsUrlPlaceholder": "https://beispiel.com/gtfs.zip",
+    "gtfsUrlHelp": "URL zum statischen GTFS-Feed (ZIP-Datei)",
+    "gtfsRtUrls": "GTFS-RT-URLs (Optional)",
+    "gtfsRtUrlsPlaceholder": "https://beispiel.com/gtfs-rt, https://beispiel.com/gtfs-rt-2",
+    "gtfsRtUrlsHelp": "Durch Kommas getrennte GTFS-Echtzeit-Feed-URLs",
+    "stopIds": "Haltestellen-IDs",
+    "stopIdsPlaceholder": "1001, 1002, 1003",
+    "stopIdsHelp": "Durch Kommas getrennte Haltestellen-IDs aus Ihrem GTFS-Feed",
+    "browseStops": "Haltestellen durchsuchen",
+    "refreshInterval": "Aktualisierungsintervall (Sekunden)",
+    "showAlerts": "Warnungen anzeigen",
+    "generatedUrl": "Generierte URL",
+    "copy": "Kopieren",
+    "previewBelow": "Vorschau unten",
+    "goToDepartureBoard": "Zur Abfahrtstafel",
+    "livePreview": "Live-Vorschau",
+    "hidePreview": "Vorschau ausblenden",
+    "required": "*"
+  },
+  "stopSelector": {
+    "title": "Haltestellen auswählen",
+    "loading": "GTFS-Daten werden geladen...",
+    "searchPlaceholder": "Haltestellen nach Name, ID oder Code suchen...",
+    "stopsFound": "{{count}} Haltestelle gefunden",
+    "stopsFound_plural": "{{count}} Haltestellen gefunden",
+    "selected": "{{count}} ausgewählt",
+    "cancel": "Abbrechen",
+    "addStops": "{{count}} Haltestelle hinzufügen",
+    "addStops_plural": "{{count}} Haltestellen hinzufügen",
+    "stopId": "ID: {{id}}",
+    "stopCode": "Code: {{code}}",
+    "close": "×",
+    "noGtfsUrl": "Bitte geben Sie zuerst eine GTFS-URL ein"
+  },
+  "departureBoard": {
+    "loading": "GTFS-Daten werden geladen... {{progress}}%",
+    "error": "Fehler",
+    "noDepartures": "Keine Abfahrten für die ausgewählten Haltestellen gefunden",
+    "noMoreDepartures": "Keine weiteren Abfahrten heute",
+    "lastDeparture": "LETZTE",
+    "minutes": "{{count}}'",
+    "currentTime": "Aktuelle Zeit"
+  },
+  "alerts": {
+    "noAlerts": "Keine aktiven Warnungen"
+  },
+  "splash": {
+    "title": "GTFS Abfahrtstafel",
+    "messages": {
+      "1": "Berechnung optimaler Abfahrtswinkel... 🚌",
+      "2": "Synchronisierung mit den Verkehrsgöttern... ⏰",
+      "3": "Entschlüsselung von GTFS-Hieroglyphen... 📜",
+      "4": "Aufwärmen der Abfahrtsmotoren... 🚀",
+      "5": "Laden der Routen aus der Cloud... ☁️",
+      "6": "Bussen die Uhrzeit beibringen... 🕐",
+      "7": "Chaos in Fahrpläne verwandeln... 📊"
+    }
+  },
+  "language": {
+    "selector": "Sprache",
+    "en": "English",
+    "fr": "Français",
+    "es": "Español",
+    "de": "Deutsch"
+  }
+}

@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface Alert {
   id: string
@@ -12,10 +13,12 @@ interface AlertsPanelProps {
 }
 
 export const AlertsPanel: React.FC<AlertsPanelProps> = ({ alerts }) => {
+  const { t } = useTranslation()
+
   if (alerts.length === 0) {
     return (
       <div className="bg-white rounded-lg shadow-lg p-6 h-full">
-        <p className="text-gray-500 text-sm">No active alerts</p>
+        <p className="text-gray-500 text-sm">{t('alerts.noAlerts')}</p>
       </div>
     )
   }
