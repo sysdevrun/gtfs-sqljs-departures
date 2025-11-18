@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { format } from 'date-fns-tz'
 import { DepartureRow } from './DepartureRow'
 import { AlertsPanel } from './AlertsPanel'
+import { TechnicalDetailsPanel } from './TechnicalDetailsPanel'
 import { SplashScreen } from './SplashScreen'
 import { useGtfs } from '../hooks/useGtfs'
 import { useDepartures } from '../hooks/useDepartures'
@@ -17,6 +18,8 @@ export const DepartureBoard: React.FC<DepartureBoardProps> = ({ config }) => {
   const { t } = useTranslation()
   const [now, setNow] = useState(new Date())
   const [refreshTrigger, setRefreshTrigger] = useState(0)
+  const [lastRenderTime, setLastRenderTime] = useState(new Date())
+  const [agencyName, setAgencyName] = useState('')
 
   // Set CSS custom properties for dynamic theming
   useEffect(() => {
@@ -37,6 +40,23 @@ export const DepartureBoard: React.FC<DepartureBoardProps> = ({ config }) => {
 
   const routeIds = groups.map(g => g.routeId)
   const { alerts } = useAlerts(gtfs, routeIds, config.stopIds, refreshTrigger)
+
+  // Get agency name for technical details
+  useEffect(() => {
+    if (gtfs) {
+      const agencies = gtfs.getAgencies()
+      if (agencies.length > 0) {
+        setAgencyName(agencies[0].agency_name || 'Unknown Agency')
+      }
+    }
+  }, [gtfs])
+
+  // Update last render time when groups change
+  useEffect(() => {
+    if (groups.length > 0) {
+      setLastRenderTime(new Date())
+    }
+  }, [groups])
 
   // Update current time every second
   useEffect(() => {
@@ -105,8 +125,28 @@ export const DepartureBoard: React.FC<DepartureBoardProps> = ({ config }) => {
 
           {config.showAlerts && (
             <div className="lg:w-1/3">
-              <div className="lg:sticky lg:top-4">
+              <div className="lg:sticky lg:top-4 space-y-4">
                 <AlertsPanel alerts={alerts} />
+                {config.showTechnicalDetails && (
+                  <TechnicalDetailsPanel
+                    timezone={timezone}
+                    agencyName={agencyName}
+                    lastRenderTime={lastRenderTime}
+                  />
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Show technical details panel even when alerts are hidden */}
+          {!config.showAlerts && config.showTechnicalDetails && (
+            <div className="lg:w-1/3">
+              <div className="lg:sticky lg:top-4">
+                <TechnicalDetailsPanel
+                  timezone={timezone}
+                  agencyName={agencyName}
+                  lastRenderTime={lastRenderTime}
+                />
               </div>
             </div>
           )}
