@@ -30,6 +30,7 @@ gtfs-sqljs-departures/
 │   │   ├── HelpMessage.tsx            # URL parameter help screen (legacy)
 │   │   ├── RouteIcon.tsx              # Route badge with GTFS colors
 │   │   ├── SplashScreen.tsx           # Loading screen
+│   │   ├── StopSelector.tsx           # Browse stops modal (loads only stops.txt)
 │   │   ├── TechnicalDetailsPanel.tsx  # Technical info panel
 │   │   └── URLBuilder.tsx             # Interactive URL builder with preview
 │   ├── hooks/
@@ -70,6 +71,7 @@ The application includes an interactive URL builder that makes it easy to config
   - Form-based configuration with validation
   - Language selector (EN, FR, ES, DE)
   - Quick start presets (e.g., Car Jaune)
+  - Browse stops feature for easy stop selection (loads only stops.txt for fast performance)
   - Technical details toggle with trip short name display
   - Color theme customization with visual pickers
   - Live preview of the departure board

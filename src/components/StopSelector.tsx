@@ -35,7 +35,24 @@ export const StopSelector: React.FC<StopSelectorProps> = ({ gtfsUrl, onSelectSto
 
         const proxiedUrl = proxyUrl(gtfsUrl)
         const gtfsInstance = await GtfsSqlJs.fromZip(proxiedUrl, {
-          skipFiles: ['shapes.txt', 'frequencies.txt', 'pathways.txt', 'levels.txt', 'translations.txt']
+          skipFiles: [
+            'fare_attributes.txt',
+            'fare_rules.txt',
+            'shapes.txt',
+            'trips.txt',
+            'stop_times.txt',
+            'routes.txt',
+            'calendar.txt',
+            'calendar_dates.txt',
+            'agency.txt',
+            'frequencies.txt',
+            'pathways.txt',
+            'levels.txt',
+            'translations.txt',
+            'transfers.txt',
+            'feed_info.txt',
+            'attributions.txt'
+          ]
         })
 
         const allStops = gtfsInstance.getStops()
