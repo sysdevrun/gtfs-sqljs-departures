@@ -110,15 +110,55 @@ const presets: Preset[] = [
   }
 ]
 
+const STORAGE_KEY = 'gtfs-departure-board-config'
+
 export const URLBuilder: React.FC = () => {
   const { t, i18n } = useTranslation()
-  const [gtfsUrl, setGtfsUrl] = useState('')
-  const [gtfsRtUrls, setGtfsRtUrls] = useState('')
-  const [stopIds, setStopIds] = useState('')
-  const [showAlerts, setShowAlerts] = useState(false)
-  const [refreshInterval, setRefreshInterval] = useState('20')
+
+  // Load from localStorage on mount
+  const loadFromStorage = () => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY)
+      if (stored) {
+        return JSON.parse(stored)
+      }
+    } catch (e) {
+      console.error('Failed to load from localStorage:', e)
+    }
+    return null
+  }
+
+  const stored = loadFromStorage()
+
+  const [gtfsUrl, setGtfsUrl] = useState(stored?.gtfsUrl || '')
+  const [gtfsRtUrls, setGtfsRtUrls] = useState(stored?.gtfsRtUrls || '')
+  const [stopIds, setStopIds] = useState(stored?.stopIds || '')
+  const [showAlerts, setShowAlerts] = useState(stored?.showAlerts ?? false)
+  const [refreshInterval, setRefreshInterval] = useState(stored?.refreshInterval || '20')
+  const [showTechnicalDetails, setShowTechnicalDetails] = useState(stored?.showTechnicalDetails ?? false)
+  const [primaryColor, setPrimaryColor] = useState(stored?.primaryColor || '3b82f6')
+  const [secondaryColor, setSecondaryColor] = useState(stored?.secondaryColor || 'f97316')
   const [showPreview, setShowPreview] = useState(false)
   const [showStopSelector, setShowStopSelector] = useState(false)
+
+  // Save to localStorage whenever values change
+  React.useEffect(() => {
+    const config = {
+      gtfsUrl,
+      gtfsRtUrls,
+      stopIds,
+      showAlerts,
+      refreshInterval,
+      showTechnicalDetails,
+      primaryColor,
+      secondaryColor
+    }
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(config))
+    } catch (e) {
+      console.error('Failed to save to localStorage:', e)
+    }
+  }, [gtfsUrl, gtfsRtUrls, stopIds, showAlerts, refreshInterval, showTechnicalDetails, primaryColor, secondaryColor])
 
   const buildUrl = (): string => {
     const params = new URLSearchParams()
@@ -127,6 +167,9 @@ export const URLBuilder: React.FC = () => {
     if (stopIds) params.set('stops', stopIds)
     if (showAlerts) params.set('showAlerts', 'true')
     if (refreshInterval) params.set('refresh', refreshInterval)
+    if (showTechnicalDetails) params.set('tech', 'true')
+    if (primaryColor !== '3b82f6') params.set('primary', primaryColor)
+    if (secondaryColor !== 'f97316') params.set('secondary', secondaryColor)
     params.set('lang', i18n.language)
 
     return `${window.location.origin}${window.location.pathname}?${params.toString()}`
@@ -134,10 +177,13 @@ export const URLBuilder: React.FC = () => {
 
   const getConfig = (): AppConfig => ({
     gtfsUrl: gtfsUrl || undefined,
-    gtfsRtUrls: gtfsRtUrls ? gtfsRtUrls.split(',').map(s => s.trim()).filter(Boolean) : [],
-    stopIds: stopIds ? stopIds.split(',').map(s => s.trim()).filter(Boolean) : [],
+    gtfsRtUrls: gtfsRtUrls ? gtfsRtUrls.split(',').map((s: string) => s.trim()).filter(Boolean) : [],
+    stopIds: stopIds ? stopIds.split(',').map((s: string) => s.trim()).filter(Boolean) : [],
     showAlerts,
-    refreshInterval: parseInt(refreshInterval) || 20
+    refreshInterval: parseInt(refreshInterval) || 20,
+    showTechnicalDetails,
+    primaryColor,
+    secondaryColor
   })
 
   const applyPreset = (preset: Preset) => {
@@ -146,6 +192,7 @@ export const URLBuilder: React.FC = () => {
     if (preset.config.stopIds) setStopIds(preset.config.stopIds.join(', '))
     if (preset.config.showAlerts !== undefined) setShowAlerts(preset.config.showAlerts)
     if (preset.config.refreshInterval) setRefreshInterval(preset.config.refreshInterval.toString())
+    // Don't override color/tech settings when applying preset
   }
 
   const handlePreview = () => {
@@ -163,7 +210,7 @@ export const URLBuilder: React.FC = () => {
 
   const handleSelectStops = (selectedStopIds: string[]) => {
     // Append to existing stops
-    const existingStops = stopIds ? stopIds.split(',').map(s => s.trim()).filter(Boolean) : []
+    const existingStops = stopIds ? stopIds.split(',').map((s: string) => s.trim()).filter(Boolean) : []
     const newStops = [...new Set([...existingStops, ...selectedStopIds])]
     setStopIds(newStops.join(', '))
   }
@@ -284,6 +331,70 @@ export const URLBuilder: React.FC = () => {
                 <label htmlFor="showAlerts" className="ml-2 text-sm font-semibold text-gray-700">
                   {t('urlBuilder.showAlerts')}
                 </label>
+              </div>
+
+              <div className="flex items-center pt-8">
+                <input
+                  type="checkbox"
+                  id="showTechnicalDetails"
+                  checked={showTechnicalDetails}
+                  onChange={(e) => setShowTechnicalDetails(e.target.checked)}
+                  className="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500"
+                />
+                <label htmlFor="showTechnicalDetails" className="ml-2 text-sm font-semibold text-gray-700">
+                  Show Technical Details
+                </label>
+              </div>
+            </div>
+
+            {/* Color Theme */}
+            <div className="border-t pt-4">
+              <h3 className="text-lg font-semibold text-gray-800 mb-3">Color Theme</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Primary Color
+                  </label>
+                  <div className="flex gap-2 items-center">
+                    <input
+                      type="color"
+                      value={`#${primaryColor}`}
+                      onChange={(e) => setPrimaryColor(e.target.value.substring(1))}
+                      className="h-10 w-20 rounded cursor-pointer"
+                    />
+                    <input
+                      type="text"
+                      value={primaryColor}
+                      onChange={(e) => setPrimaryColor(e.target.value.replace(/[^0-9a-fA-F]/g, '').substring(0, 6))}
+                      placeholder="3b82f6"
+                      maxLength={6}
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-mono text-sm"
+                    />
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">Default: 3b82f6 (blue)</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Secondary Color
+                  </label>
+                  <div className="flex gap-2 items-center">
+                    <input
+                      type="color"
+                      value={`#${secondaryColor}`}
+                      onChange={(e) => setSecondaryColor(e.target.value.substring(1))}
+                      className="h-10 w-20 rounded cursor-pointer"
+                    />
+                    <input
+                      type="text"
+                      value={secondaryColor}
+                      onChange={(e) => setSecondaryColor(e.target.value.replace(/[^0-9a-fA-F]/g, '').substring(0, 6))}
+                      placeholder="f97316"
+                      maxLength={6}
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-mono text-sm"
+                    />
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">Default: f97316 (orange)</p>
+                </div>
               </div>
             </div>
           </div>

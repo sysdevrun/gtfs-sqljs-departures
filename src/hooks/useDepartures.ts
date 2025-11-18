@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { GtfsSqlJs } from 'gtfs-sqljs'
 import { RouteDirectionGroup } from '../types'
-import { format } from 'date-fns'
+import { formatInTimeZone } from 'date-fns-tz'
 
 interface UseDeparturesResult {
   groups: RouteDirectionGroup[]
@@ -30,13 +30,16 @@ export const useDepartures = (
 
         // Get timezone from first agency
         const agencies = gtfs.getAgencies()
+        let agencyTimezone = 'America/New_York'
         if (agencies.length > 0 && agencies[0].agency_timezone) {
-          setTimezone(agencies[0].agency_timezone)
+          agencyTimezone = agencies[0].agency_timezone
+          setTimezone(agencyTimezone)
         }
 
         const now = new Date()
-        const currentDate = format(now, 'yyyyMMdd')
-        const currentTime = format(now, 'HH:mm:ss')
+        // Use agency timezone for both date and time to ensure correct filtering
+        const currentDate = formatInTimeZone(now, agencyTimezone, 'yyyyMMdd')
+        const currentTime = formatInTimeZone(now, agencyTimezone, 'HH:mm:ss')
 
         const routeDirectionMap = new Map<string, RouteDirectionGroup>()
 
@@ -96,6 +99,7 @@ export const useDepartures = (
                 routeSortOrder: typeof route.route_sort_order === 'number' ? route.route_sort_order : 999999,
                 directionId: trip.direction_id ?? 0,
                 tripHeadsign: trip.trip_headsign || '',
+                tripShortName: trip.trip_short_name || '',
                 stopId,
                 departureTime: departureDate,
                 isRealtime: !!(stopTime as any).delay || !!(stopTime as any).time,

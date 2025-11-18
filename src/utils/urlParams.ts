@@ -21,12 +21,22 @@ export const parseUrlParams = (): AppConfig => {
   const refreshParam = params.get('refresh')
   const refreshInterval = refreshParam ? parseInt(refreshParam, 10) : 20
 
+  // Parse technical details flag
+  const showTechnicalDetails = params.get('tech') === 'true'
+
+  // Parse color theme (defaults: blue and orange)
+  const primaryColor = params.get('primary') || '3b82f6'
+  const secondaryColor = params.get('secondary') || 'f97316'
+
   return {
     gtfsUrl,
     gtfsRtUrls,
     stopIds,
     showAlerts,
-    refreshInterval: isNaN(refreshInterval) ? 20 : refreshInterval
+    refreshInterval: isNaN(refreshInterval) ? 20 : refreshInterval,
+    showTechnicalDetails,
+    primaryColor,
+    secondaryColor
   }
 }
 

@@ -10,6 +10,9 @@ export interface AppConfig {
   stopIds: string[]
   showAlerts: boolean
   refreshInterval: number // in seconds
+  showTechnicalDetails: boolean
+  primaryColor: string // hex color without #
+  secondaryColor: string // hex color without #
 }
 
 export interface DepartureInfo {
@@ -21,6 +24,7 @@ export interface DepartureInfo {
   routeSortOrder: number
   directionId: number
   tripHeadsign: string
+  tripShortName: string
   stopId: string
   departureTime: Date
   isRealtime: boolean

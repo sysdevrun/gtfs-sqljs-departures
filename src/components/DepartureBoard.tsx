@@ -18,6 +18,12 @@ export const DepartureBoard: React.FC<DepartureBoardProps> = ({ config }) => {
   const [now, setNow] = useState(new Date())
   const [refreshTrigger, setRefreshTrigger] = useState(0)
 
+  // Set CSS custom properties for dynamic theming
+  useEffect(() => {
+    document.documentElement.style.setProperty('--primary-color', `#${config.primaryColor}`)
+    document.documentElement.style.setProperty('--secondary-color', `#${config.secondaryColor}`)
+  }, [config.primaryColor, config.secondaryColor])
+
   const { gtfs, loading: gtfsLoading, error: gtfsError, progress } = useGtfs(
     config.gtfsUrl,
     config.gtfsRtUrls
@@ -90,6 +96,7 @@ export const DepartureBoard: React.FC<DepartureBoardProps> = ({ config }) => {
                     group={group}
                     timezone={timezone}
                     now={now}
+                    showTechnicalDetails={config.showTechnicalDetails}
                   />
                 ))
               )}
