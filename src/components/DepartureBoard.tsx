@@ -104,13 +104,16 @@ export const DepartureBoard: React.FC<DepartureBoardProps> = ({ config }) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50">
-      <div className="container mx-auto p-4">
-        <div className="flex justify-end items-center mb-4">
+      {/* Sticky clock at top */}
+      <div className="sticky top-0 z-10 bg-white border-b-2 border-gray-300 shadow-md">
+        <div className="container mx-auto px-4 py-3 flex justify-end">
           <div className="text-2xl font-bold text-primary-700">
             {formatInTimeZone(now, timezone, 'HH:mm')}
           </div>
         </div>
+      </div>
 
+      <div className="container mx-auto p-4">
         <div className={`flex flex-col ${config.showAlerts ? 'lg:flex-row' : ''} gap-6`}>
           <div className={config.showAlerts ? 'lg:w-2/3' : 'w-full'}>
             <div className="space-y-3">

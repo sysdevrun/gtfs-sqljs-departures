@@ -26,7 +26,7 @@ export const DepartureRow: React.FC<DepartureRowProps> = ({ group, timezone, now
             routeShortName={group.routeShortName}
             routeColor={group.routeColor}
             routeTextColor={group.routeTextColor}
-            className="text-lg"
+            className={`text-2xl ${showTechnicalDetails ? 'h-16 min-w-16' : 'h-14 min-w-14'}`}
           />
         </div>
         <div className="flex-grow min-w-0">
@@ -42,7 +42,7 @@ export const DepartureRow: React.FC<DepartureRowProps> = ({ group, timezone, now
           routeShortName={group.routeShortName}
           routeColor={group.routeColor}
           routeTextColor={group.routeTextColor}
-          className="text-lg"
+          className={`text-2xl ${showTechnicalDetails ? 'h-16 min-w-16' : 'h-14 min-w-14'}`}
         />
       </div>
 
