@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { format } from 'date-fns'
+import { format } from 'date-fns-tz'
 import { DepartureRow } from './DepartureRow'
 import { AlertsPanel } from './AlertsPanel'
 import { SplashScreen } from './SplashScreen'
-import { LanguageSelector } from './LanguageSelector'
 import { useGtfs } from '../hooks/useGtfs'
 import { useDepartures } from '../hooks/useDepartures'
 import { useAlerts } from '../hooks/useAlerts'
@@ -71,10 +70,9 @@ export const DepartureBoard: React.FC<DepartureBoardProps> = ({ config }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50">
       <div className="container mx-auto p-4">
-        <div className="flex justify-between items-center mb-4">
-          <LanguageSelector />
+        <div className="flex justify-end items-center mb-4">
           <div className="text-2xl font-bold text-primary-700">
-            {format(now, 'HH:mm')}
+            {format(now, 'HH:mm', { timeZone: timezone })}
           </div>
         </div>
 
