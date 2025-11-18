@@ -168,8 +168,8 @@ export const URLBuilder: React.FC = () => {
     if (showAlerts) params.set('showAlerts', 'true')
     if (refreshInterval) params.set('refresh', refreshInterval)
     if (showTechnicalDetails) params.set('tech', 'true')
-    if (primaryColor !== '3b82f6') params.set('primary', primaryColor)
-    if (secondaryColor !== 'f97316') params.set('secondary', secondaryColor)
+    if (primaryColor !== '3b82f6') params.set('primaryColor', primaryColor)
+    if (secondaryColor !== 'f97316') params.set('secondaryColor', secondaryColor)
     params.set('lang', i18n.language)
 
     return `${window.location.origin}${window.location.pathname}?${params.toString()}`
@@ -412,6 +412,7 @@ export const URLBuilder: React.FC = () => {
                 className="flex-1 px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm"
               />
               <button
+                type="button"
                 onClick={handleCopyUrl}
                 className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
               >
@@ -423,6 +424,7 @@ export const URLBuilder: React.FC = () => {
           {/* Action Buttons */}
           <div className="flex gap-3">
             <button
+              type="button"
               onClick={handlePreview}
               disabled={!isValid}
               className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
@@ -434,6 +436,7 @@ export const URLBuilder: React.FC = () => {
               {t('urlBuilder.previewBelow')}
             </button>
             <button
+              type="button"
               onClick={handleGoToUrl}
               disabled={!isValid}
               className={`px-6 py-3 rounded-lg font-semibold transition-colors ${

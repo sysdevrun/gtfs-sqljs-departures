@@ -25,8 +25,8 @@ export const parseUrlParams = (): AppConfig => {
   const showTechnicalDetails = params.get('tech') === 'true'
 
   // Parse color theme (defaults: blue and orange)
-  const primaryColor = params.get('primary') || '3b82f6'
-  const secondaryColor = params.get('secondary') || 'f97316'
+  const primaryColor = params.get('primaryColor') || '3b82f6'
+  const secondaryColor = params.get('secondaryColor') || 'f97316'
 
   return {
     gtfsUrl,
