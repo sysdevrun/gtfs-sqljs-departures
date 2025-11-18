@@ -1,5 +1,5 @@
 import React from 'react'
-import { format } from 'date-fns'
+import { formatInTimeZone } from 'date-fns-tz'
 
 interface TechnicalDetailsPanelProps {
   timezone: string
@@ -26,7 +26,7 @@ export const TechnicalDetailsPanel: React.FC<TechnicalDetailsPanelProps> = ({
         </div>
         <div className="flex justify-between">
           <span className="text-gray-600">Last Rendering:</span>
-          <span className="font-mono text-gray-900">{format(lastRenderTime, 'HH:mm:ss')}</span>
+          <span className="font-mono text-gray-900">{formatInTimeZone(lastRenderTime, timezone, 'HH:mm:ss')}</span>
         </div>
       </div>
     </div>
