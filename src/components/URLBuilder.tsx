@@ -204,10 +204,6 @@ export const URLBuilder: React.FC = () => {
     navigator.clipboard.writeText(url)
   }
 
-  const handleGoToUrl = () => {
-    window.location.href = buildUrl()
-  }
-
   const handleSelectStops = (selectedStopIds: string[]) => {
     // Append to existing stops
     const existingStops = stopIds ? stopIds.split(',').map((s: string) => s.trim()).filter(Boolean) : []
@@ -435,18 +431,16 @@ export const URLBuilder: React.FC = () => {
             >
               {t('urlBuilder.previewBelow')}
             </button>
-            <button
-              type="button"
-              onClick={handleGoToUrl}
-              disabled={!isValid}
-              className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
+            <a
+              href={isValid ? buildUrl() : undefined}
+              className={`px-6 py-3 rounded-lg font-semibold transition-colors inline-block text-center ${
                 isValid
                   ? 'bg-secondary-500 text-white hover:bg-secondary-600'
-                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed pointer-events-none'
               }`}
             >
               {t('urlBuilder.goToDepartureBoard')}
-            </button>
+            </a>
           </div>
         </div>
 

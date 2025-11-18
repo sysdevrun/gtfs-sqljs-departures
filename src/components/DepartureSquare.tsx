@@ -23,6 +23,11 @@ export const DepartureSquare: React.FC<DepartureSquareProps> = ({
         ${isRealtime ? 'bg-primary-500 text-white' : 'bg-gray-200 text-gray-800'}
       `}
     >
+      {isRealtime && (
+        <div className="absolute -top-1 -left-1 bg-green-500 text-white text-[0.55rem] px-1.5 py-0.5 rounded font-bold">
+          RT
+        </div>
+      )}
       <div className={`text-2xl font-bold ${time.isMinutes ? 'mb-1' : ''}`}>
         {time.display}
       </div>
