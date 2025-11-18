@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { GtfsSqlJs } from 'gtfs-sqljs'
 import { proxyUrl } from '../utils/proxy'
 
@@ -16,6 +17,7 @@ interface StopSelectorProps {
 }
 
 export const StopSelector: React.FC<StopSelectorProps> = ({ gtfsUrl, onSelectStops, onClose }) => {
+  const { t } = useTranslation()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [stops, setStops] = useState<Stop[]>([])
@@ -85,19 +87,19 @@ export const StopSelector: React.FC<StopSelectorProps> = ({ gtfsUrl, onSelectSto
       <div className="bg-white rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col">
         <div className="p-6 border-b border-gray-200">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold text-gray-800">Select Stops</h2>
+            <h2 className="text-2xl font-bold text-gray-800">{t('stopSelector.title')}</h2>
             <button
               onClick={onClose}
               className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
             >
-              ×
+              {t('stopSelector.close')}
             </button>
           </div>
 
           {loading && (
             <div className="text-center py-4">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
-              <p className="mt-2 text-gray-600">Loading GTFS data...</p>
+              <p className="mt-2 text-gray-600">{t('stopSelector.loading')}</p>
             </div>
           )}
 
@@ -113,12 +115,12 @@ export const StopSelector: React.FC<StopSelectorProps> = ({ gtfsUrl, onSelectSto
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search stops by name, ID, or code..."
+                placeholder={t('stopSelector.searchPlaceholder')}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
               <p className="text-xs text-gray-500 mt-2">
-                {filteredStops.length} stop{filteredStops.length !== 1 ? 's' : ''} found
-                {selectedStops.size > 0 && ` • ${selectedStops.size} selected`}
+                {t('stopSelector.stopsFound', { count: filteredStops.length })}
+                {selectedStops.size > 0 && ` • ${t('stopSelector.selected', { count: selectedStops.size })}`}
               </p>
             </>
           )}
@@ -147,8 +149,8 @@ export const StopSelector: React.FC<StopSelectorProps> = ({ gtfsUrl, onSelectSto
                           {stop.stop_name}
                         </div>
                         <div className="text-sm text-gray-500">
-                          ID: {stop.stop_id}
-                          {stop.stop_code && ` • Code: ${stop.stop_code}`}
+                          {t('stopSelector.stopId', { id: stop.stop_id })}
+                          {stop.stop_code && ` • ${t('stopSelector.stopCode', { code: stop.stop_code })}`}
                         </div>
                         {stop.stop_desc && (
                           <div className="text-xs text-gray-400 mt-1 truncate">
@@ -178,7 +180,7 @@ export const StopSelector: React.FC<StopSelectorProps> = ({ gtfsUrl, onSelectSto
                 onClick={onClose}
                 className="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
               >
-                Cancel
+                {t('stopSelector.cancel')}
               </button>
               <button
                 onClick={handleConfirm}
@@ -189,7 +191,7 @@ export const StopSelector: React.FC<StopSelectorProps> = ({ gtfsUrl, onSelectSto
                     : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }`}
               >
-                Add {selectedStops.size} Stop{selectedStops.size !== 1 ? 's' : ''}
+                {t('stopSelector.addStops', { count: selectedStops.size })}
               </button>
             </div>
           </>

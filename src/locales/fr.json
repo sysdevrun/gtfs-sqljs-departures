@@ -1,0 +1,74 @@
+{
+  "app": {
+    "title": "Tableau des Départs GTFS"
+  },
+  "urlBuilder": {
+    "title": "Tableau des Départs GTFS - Générateur d'URL",
+    "quickStart": "Préréglages de Démarrage Rapide",
+    "gtfsUrl": "URL GTFS",
+    "gtfsUrlPlaceholder": "https://exemple.com/gtfs.zip",
+    "gtfsUrlHelp": "URL vers le flux GTFS statique (fichier ZIP)",
+    "gtfsRtUrls": "URLs GTFS-RT (Optionnel)",
+    "gtfsRtUrlsPlaceholder": "https://exemple.com/gtfs-rt, https://exemple.com/gtfs-rt-2",
+    "gtfsRtUrlsHelp": "URLs de flux GTFS Temps Réel séparées par des virgules",
+    "stopIds": "IDs des Arrêts",
+    "stopIdsPlaceholder": "1001, 1002, 1003",
+    "stopIdsHelp": "IDs des arrêts séparés par des virgules depuis votre flux GTFS",
+    "browseStops": "Parcourir les Arrêts",
+    "refreshInterval": "Intervalle de Rafraîchissement (secondes)",
+    "showAlerts": "Afficher les Alertes",
+    "generatedUrl": "URL Générée",
+    "copy": "Copier",
+    "previewBelow": "Aperçu Ci-dessous",
+    "goToDepartureBoard": "Aller au Tableau des Départs",
+    "livePreview": "Aperçu en Direct",
+    "hidePreview": "Masquer l'Aperçu",
+    "required": "*"
+  },
+  "stopSelector": {
+    "title": "Sélectionner les Arrêts",
+    "loading": "Chargement des données GTFS...",
+    "searchPlaceholder": "Rechercher des arrêts par nom, ID ou code...",
+    "stopsFound": "{{count}} arrêt trouvé",
+    "stopsFound_plural": "{{count}} arrêts trouvés",
+    "selected": "{{count}} sélectionné",
+    "cancel": "Annuler",
+    "addStops": "Ajouter {{count}} Arrêt",
+    "addStops_plural": "Ajouter {{count}} Arrêts",
+    "stopId": "ID: {{id}}",
+    "stopCode": "Code: {{code}}",
+    "close": "×",
+    "noGtfsUrl": "Veuillez d'abord entrer une URL GTFS"
+  },
+  "departureBoard": {
+    "loading": "Chargement des données GTFS... {{progress}}%",
+    "error": "Erreur",
+    "noDepartures": "Aucun départ trouvé pour les arrêts sélectionnés",
+    "noMoreDepartures": "Plus de départs aujourd'hui",
+    "lastDeparture": "DERNIER",
+    "minutes": "{{count}}'",
+    "currentTime": "Heure actuelle"
+  },
+  "alerts": {
+    "noAlerts": "Aucune alerte active"
+  },
+  "splash": {
+    "title": "Tableau des Départs GTFS",
+    "messages": {
+      "1": "Calcul des angles de départ optimaux... 🚌",
+      "2": "Synchronisation avec les dieux du transport... ⏰",
+      "3": "Décodage des hiéroglyphes GTFS... 📜",
+      "4": "Chauffage des moteurs de départ... 🚀",
+      "5": "Chargement des itinéraires depuis le cloud... ☁️",
+      "6": "Apprentissage de l'heure aux bus... 🕐",
+      "7": "Organisation du chaos en horaires... 📊"
+    }
+  },
+  "language": {
+    "selector": "Langue",
+    "en": "English",
+    "fr": "Français",
+    "es": "Español",
+    "de": "Deutsch"
+  }
+}
