@@ -36,6 +36,7 @@ export interface AppConfig {
   refreshInterval: number // in seconds
   showTechnicalDetails: boolean
   showDebug: boolean // Show debug panel with raw GTFS data
+  showQrCode: boolean // Show QR code to open on mobile
   primaryColor: string // hex color without #
   secondaryColor: string // hex color without #
   logoUrl?: string // URL to logo image displayed next to clock

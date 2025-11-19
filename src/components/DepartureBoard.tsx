@@ -5,6 +5,7 @@ import { DepartureRow } from './DepartureRow'
 import { AlertsPanel } from './AlertsPanel'
 import { TechnicalDetailsPanel } from './TechnicalDetailsPanel'
 import { DebugPanel } from './DebugPanel'
+import { QRCodePanel } from './QRCodePanel'
 import { SplashScreen } from './SplashScreen'
 import { useGtfs } from '../hooks/useGtfs'
 import { useDepartures } from '../hooks/useDepartures'
@@ -165,21 +166,29 @@ export const DepartureBoard: React.FC<DepartureBoardProps> = ({ config }) => {
                     stopIds={config.stopIds}
                   />
                 )}
+                {config.showQrCode && (
+                  <QRCodePanel currentUrl={window.location.href} />
+                )}
               </div>
             </div>
           )}
 
-          {/* Show technical details panel even when alerts are hidden */}
-          {!config.showAlerts && config.showTechnicalDetails && (
+          {/* Show panels even when alerts are hidden */}
+          {!config.showAlerts && (config.showTechnicalDetails || config.showQrCode) && (
             <div className="lg:w-1/3">
-              <div className="lg:sticky lg:top-4">
-                <TechnicalDetailsPanel
-                  timezone={timezone}
-                  agencyName={agencyName}
-                  lastRenderTime={lastRenderTime}
-                  gtfs={gtfs}
-                  stopIds={config.stopIds}
-                />
+              <div className="lg:sticky lg:top-4 space-y-4">
+                {config.showTechnicalDetails && (
+                  <TechnicalDetailsPanel
+                    timezone={timezone}
+                    agencyName={agencyName}
+                    lastRenderTime={lastRenderTime}
+                    gtfs={gtfs}
+                    stopIds={config.stopIds}
+                  />
+                )}
+                {config.showQrCode && (
+                  <QRCodePanel currentUrl={window.location.href} />
+                )}
               </div>
             </div>
           )}
