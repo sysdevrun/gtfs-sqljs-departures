@@ -5,6 +5,8 @@
   "urlBuilder": {
     "title": "GTFS Departure Board - URL Builder",
     "quickStart": "Quick Start Presets",
+    "searchFrenchDatasets": "Search French Transport Datasets",
+    "orManualEntry": "— or enter manually —",
     "gtfsUrl": "GTFS URL",
     "gtfsUrlPlaceholder": "https://example.com/gtfs.zip",
     "gtfsUrlHelp": "URL to GTFS static feed (ZIP file)",
@@ -70,5 +72,16 @@
     "fr": "Français",
     "es": "Español",
     "de": "Deutsch"
+  },
+  "datasetSearch": {
+    "title": "Search French Transport Datasets",
+    "searchPlaceholder": "Search by network name, area, or operator...",
+    "loading": "Loading datasets...",
+    "error": "Error loading datasets",
+    "noResults": "No datasets found",
+    "datasetsFound": "{{count}} dataset found",
+    "datasetsFound_plural": "{{count}} datasets found",
+    "coverage": "Coverage",
+    "selectDataset": "Use This Dataset"
   }
 }

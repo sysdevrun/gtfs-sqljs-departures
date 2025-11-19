@@ -5,6 +5,8 @@
   "urlBuilder": {
     "title": "GTFS Abfahrtstafel - URL-Generator",
     "quickStart": "Schnellstart-Voreinstellungen",
+    "searchFrenchDatasets": "Französische Verkehrsdatensätze durchsuchen",
+    "orManualEntry": "— oder manuell eingeben —",
     "gtfsUrl": "GTFS-URL",
     "gtfsUrlPlaceholder": "https://beispiel.com/gtfs.zip",
     "gtfsUrlHelp": "URL zum statischen GTFS-Feed (ZIP-Datei)",
@@ -70,5 +72,16 @@
     "fr": "Français",
     "es": "Español",
     "de": "Deutsch"
+  },
+  "datasetSearch": {
+    "title": "Französische Verkehrsdatensätze durchsuchen",
+    "searchPlaceholder": "Nach Netzwerkname, Gebiet oder Betreiber suchen...",
+    "loading": "Datensätze werden geladen...",
+    "error": "Fehler beim Laden der Datensätze",
+    "noResults": "Keine Datensätze gefunden",
+    "datasetsFound": "{{count}} Datensatz gefunden",
+    "datasetsFound_plural": "{{count}} Datensätze gefunden",
+    "coverage": "Abdeckung",
+    "selectDataset": "Diesen Datensatz verwenden"
   }
 }
