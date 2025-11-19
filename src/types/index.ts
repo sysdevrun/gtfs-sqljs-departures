@@ -13,6 +13,8 @@ export interface AppConfig {
   showTechnicalDetails: boolean
   primaryColor: string // hex color without #
   secondaryColor: string // hex color without #
+  logoUrl?: string // URL to logo image displayed next to clock
+  customAlertMessage?: string // Custom alert message displayed before GTFS-RT alerts
 }
 
 export interface DepartureInfo {

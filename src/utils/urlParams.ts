@@ -28,6 +28,12 @@ export const parseUrlParams = (): AppConfig => {
   const primaryColor = params.get('primaryColor') || '3b82f6'
   const secondaryColor = params.get('secondaryColor') || 'f97316'
 
+  // Parse logo URL
+  const logoUrl = params.get('logoUrl') || undefined
+
+  // Parse custom alert message
+  const customAlertMessage = params.get('customAlertMessage') || undefined
+
   return {
     gtfsUrl,
     gtfsRtUrls,
@@ -36,7 +42,9 @@ export const parseUrlParams = (): AppConfig => {
     refreshInterval: isNaN(refreshInterval) ? 20 : refreshInterval,
     showTechnicalDetails,
     primaryColor,
-    secondaryColor
+    secondaryColor,
+    logoUrl,
+    customAlertMessage
   }
 }
 

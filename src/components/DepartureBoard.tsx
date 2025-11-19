@@ -106,7 +106,22 @@ export const DepartureBoard: React.FC<DepartureBoardProps> = ({ config }) => {
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50">
       {/* Sticky clock at top */}
       <div className="sticky top-0 z-10 bg-white border-b-2 border-gray-300 shadow-md">
-        <div className="container mx-auto px-4 py-3 flex justify-end">
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+          {config.logoUrl ? (
+            <div className="flex items-center">
+              <img
+                src={config.logoUrl}
+                alt="Logo"
+                className="h-12 object-contain"
+                onError={(e) => {
+                  // Hide image if it fails to load
+                  e.currentTarget.style.display = 'none'
+                }}
+              />
+            </div>
+          ) : (
+            <div></div>
+          )}
           <div className="text-2xl font-bold text-primary-700">
             {formatInTimeZone(now, timezone, 'HH:mm')}
           </div>
@@ -138,7 +153,7 @@ export const DepartureBoard: React.FC<DepartureBoardProps> = ({ config }) => {
           {config.showAlerts && (
             <div className="lg:w-1/3">
               <div className="lg:sticky lg:top-4 space-y-4">
-                <AlertsPanel alerts={alerts} />
+                <AlertsPanel alerts={alerts} customAlertMessage={config.customAlertMessage} />
                 {config.showTechnicalDetails && (
                   <TechnicalDetailsPanel
                     timezone={timezone}
