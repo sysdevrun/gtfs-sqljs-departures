@@ -130,8 +130,16 @@ export const useDepartures = (
                 tripShortName: trip.trip_short_name || '',
                 stopId,
                 departureTime: departureDate,
-                isRealtime: !!(stopTime as any).delay || !!(stopTime as any).time,
-                delay: (stopTime as any).delay,
+                // Check for realtime data in multiple possible locations
+                isRealtime: !!(
+                  (stopTime as any).delay ||
+                  (stopTime as any).time ||
+                  (stopTime as any).departure?.time ||
+                  (stopTime as any).departure?.delay ||
+                  (stopTime as any).arrival?.time ||
+                  (stopTime as any).arrival?.delay
+                ),
+                delay: (stopTime as any).delay || (stopTime as any).departure?.delay,
                 isLastDeparture: false, // Will be set later
                 tripId: stopTime.trip_id
               })
