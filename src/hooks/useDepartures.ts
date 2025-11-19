@@ -47,6 +47,17 @@ export const useDepartures = (
         const currentDate = formatInTimeZone(now, agencyTimezone, 'yyyyMMdd')
         const currentTime = formatInTimeZone(now, agencyTimezone, 'HH:mm:ss')
 
+        // WORKAROUND: getStopTimes with includeRealtime doesn't properly merge GTFS-RT data
+        // So we manually fetch and merge the realtime data ourselves
+        const realtimeStopTimeUpdates = gtfs.debugExportAllStopTimeUpdates()
+
+        // Create a lookup map for fast realtime data access: "tripId-stopId" -> realtime data
+        const realtimeMap = new Map<string, any>()
+        for (const stu of realtimeStopTimeUpdates) {
+          const key = `${stu.trip_id}-${stu.stop_id}`
+          realtimeMap.set(key, stu)
+        }
+
         const routeDirectionMap = new Map<string, RouteDirectionGroup>()
 
         // First pass: Get ALL stop times for today to identify all route-direction combinations
@@ -54,12 +65,32 @@ export const useDepartures = (
           const allStopTimes = gtfs.getStopTimes({
             stopId,
             date: currentDate,
-            includeRealtime: true
+            includeRealtime: false // We'll merge manually
           })
 
           for (const baseStopTime of allStopTimes) {
             // Cast to StopTime with GTFS-RT extensions
             const stopTime = baseStopTime as StopTimeWithRealtime
+
+            // MANUAL MERGE: Look up realtime data and merge it into stopTime
+            const realtimeKey = `${stopTime.trip_id}-${stopId}`
+            const realtimeData = realtimeMap.get(realtimeKey)
+
+            if (realtimeData) {
+              // Merge realtime fields into stopTime
+              if (realtimeData.departure) {
+                stopTime.departure = realtimeData.departure
+              }
+              if (realtimeData.arrival) {
+                stopTime.arrival = realtimeData.arrival
+              }
+              if (realtimeData.delay !== undefined) {
+                stopTime.delay = realtimeData.delay
+              }
+              if (realtimeData.time !== undefined) {
+                stopTime.time = realtimeData.time
+              }
+            }
 
             // Skip if this is the last stop of the trip
             // Get all stop times for this trip to find the maximum stop_sequence

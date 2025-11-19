@@ -138,6 +138,19 @@ export const DebugPanel: React.FC<DebugPanelProps> = ({ groups, gtfs, gtfsRtUrls
                       {tripUpdate && (
                         <div className="ml-2 mt-1">
                           <div className="text-blue-400">Trip Update:</div>
+                          {tripUpdate.stop_time_update && tripUpdate.stop_time_update.length > 0 && (
+                            <div className="ml-2 mt-1 mb-2 p-2 bg-blue-800 bg-opacity-40 rounded">
+                              <div className="text-blue-200 font-semibold">Stops with Realtime Data:</div>
+                              <div className="ml-2 text-xs">
+                                {tripUpdate.stop_time_update.map((stu: any, idx: number) => (
+                                  <div key={idx} className={stu.stop_id === departure.stopId ? 'text-green-300 font-bold' : 'text-gray-400'}>
+                                    • Stop {stu.stop_id} (seq: {stu.stop_sequence})
+                                    {stu.stop_id === departure.stopId && ' ← THIS STOP'}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                           <div className="ml-2 text-xs">
                             <pre className="text-gray-300">{JSON.stringify(tripUpdate, null, 2)}</pre>
                           </div>
@@ -155,11 +168,26 @@ export const DebugPanel: React.FC<DebugPanelProps> = ({ groups, gtfs, gtfsRtUrls
                     </div>
                   )}
 
+                  {!stopTimeUpdate && tripUpdate && (
+                    <div className="mt-2 p-2 bg-orange-900 bg-opacity-30 rounded border border-orange-500">
+                      <div className="text-orange-300">⚠ Trip has GTFS-RT data, but NOT for this stop</div>
+                      <div className="text-orange-200 text-xs mt-1">
+                        Trip {departure.tripId} has realtime updates for {tripUpdate.stop_time_update?.length || 0} stops, but stop {departure.stopId} is not included.
+                      </div>
+                      <div className="text-orange-200 text-xs mt-1">
+                        This is common - GTFS-RT feeds often only track timing points, not all stops.
+                      </div>
+                    </div>
+                  )}
+
                   {!tripUpdate && !stopTimeUpdate && realtimeStats.totalStopTimeUpdates > 0 && (
                     <div className="mt-2 p-2 bg-red-900 bg-opacity-30 rounded border border-red-500">
-                      <div className="text-red-300">⚠ No GTFS-RT match found for this trip/stop combination</div>
+                      <div className="text-red-300">⚠ No GTFS-RT data for this trip</div>
                       <div className="text-red-400 text-xs mt-1">
                         Trip ID: {departure.tripId} | Stop ID: {departure.stopId}
+                      </div>
+                      <div className="text-red-400 text-xs mt-1">
+                        The GTFS-RT feed may not cover this trip, or the data may be stale.
                       </div>
                     </div>
                   )}
@@ -172,13 +200,67 @@ export const DebugPanel: React.FC<DebugPanelProps> = ({ groups, gtfs, gtfsRtUrls
 
       {/* Show sample of all GTFS-RT data if present */}
       {realtimeStats.totalStopTimeUpdates > 0 && (
-        <div className="mt-6 p-3 bg-purple-900 bg-opacity-30 rounded border border-purple-500">
-          <div className="text-purple-300 font-bold mb-2">
-            All GTFS-RT Stop Time Updates (First 5)
+        <div className="mt-6 space-y-4">
+          {/* ID Comparison Section */}
+          <div className="p-3 bg-orange-900 bg-opacity-30 rounded border border-orange-500">
+            <div className="text-orange-300 font-bold mb-2">ID Format Analysis</div>
+            <div className="ml-2 space-y-2">
+              <div className="text-white font-semibold">Static GTFS Trip IDs (from displayed departures):</div>
+              <div className="ml-4 text-cyan-400">
+                {groups.flatMap(g => g.departures.map(d => d.tripId)).slice(0, 10).join(', ')}
+                {groups.flatMap(g => g.departures).length > 10 && '...'}
+              </div>
+
+              <div className="text-white font-semibold mt-3">GTFS-RT Trip IDs (first 10):</div>
+              <div className="ml-4 text-green-400">
+                {[...new Set(stopTimeUpdates.map(stu => stu.trip_id))].slice(0, 10).join(', ')}
+              </div>
+
+              <div className="text-white font-semibold mt-3">Static GTFS Stop IDs (from displayed departures):</div>
+              <div className="ml-4 text-cyan-400">
+                {[...new Set(groups.flatMap(g => g.departures.map(d => d.stopId)))].slice(0, 10).join(', ')}
+              </div>
+
+              <div className="text-white font-semibold mt-3">GTFS-RT Stop IDs (first 10):</div>
+              <div className="ml-4 text-green-400">
+                {[...new Set(stopTimeUpdates.map(stu => stu.stop_id).filter(Boolean))].slice(0, 10).join(', ')}
+              </div>
+
+              <div className="mt-4 p-2 bg-yellow-900 bg-opacity-40 rounded">
+                <div className="text-yellow-300 font-bold">💡 ID Mismatch Detection:</div>
+                <div className="ml-2 text-sm mt-1">
+                  {(() => {
+                    const staticTripIds = groups.flatMap(g => g.departures.map(d => d.tripId))
+                    const rtTripIds = [...new Set(stopTimeUpdates.map(stu => stu.trip_id))]
+
+                    // Check for common patterns
+                    const staticHasPrefix = staticTripIds.some(id => id.includes('-'))
+                    const rtHasPrefix = rtTripIds.some(id => id.includes('-'))
+
+                    if (staticHasPrefix && !rtHasPrefix) {
+                      return <div className="text-yellow-200">⚠️ Static GTFS has prefixed IDs (e.g., "5-151060524") but GTFS-RT may not. Try removing prefix before dash.</div>
+                    } else if (!staticHasPrefix && rtHasPrefix) {
+                      return <div className="text-yellow-200">⚠️ GTFS-RT has prefixed IDs but static GTFS may not. IDs may need prefix added.</div>
+                    } else if (staticTripIds.length > 0 && rtTripIds.length > 0 && !staticTripIds.some(sid => rtTripIds.includes(sid))) {
+                      return <div className="text-yellow-200">⚠️ No matching trip IDs found between static GTFS and GTFS-RT. The feeds may use completely different ID formats.</div>
+                    } else {
+                      return <div className="text-green-200">✓ ID formats appear similar between static and realtime feeds.</div>
+                    }
+                  })()}
+                </div>
+              </div>
+            </div>
           </div>
-          <pre className="text-xs text-gray-300 overflow-x-auto">
-            {JSON.stringify(stopTimeUpdates.slice(0, 5), null, 2)}
-          </pre>
+
+          {/* Raw GTFS-RT Data Sample */}
+          <div className="p-3 bg-purple-900 bg-opacity-30 rounded border border-purple-500">
+            <div className="text-purple-300 font-bold mb-2">
+              All GTFS-RT Stop Time Updates (First 5)
+            </div>
+            <pre className="text-xs text-gray-300 overflow-x-auto">
+              {JSON.stringify(stopTimeUpdates.slice(0, 5), null, 2)}
+            </pre>
+          </div>
         </div>
       )}
     </div>
