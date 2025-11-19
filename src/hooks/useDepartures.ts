@@ -61,6 +61,15 @@ export const useDepartures = (
             // Cast to StopTime with GTFS-RT extensions
             const stopTime = baseStopTime as StopTimeWithRealtime
 
+            // DEBUG: Log the raw stopTime to see if realtime fields are present
+            if (stopTime.trip_id === '5-184614980' && stopId === '174') {
+              console.log('DEBUG: Raw stopTime for trip 5-184614980, stop 174:', JSON.stringify(stopTime, null, 2))
+              console.log('DEBUG: Has departure?.time?', !!(stopTime as any).departure?.time)
+              console.log('DEBUG: Has time?', !!(stopTime as any).time)
+              console.log('DEBUG: Has delay?', !!(stopTime as any).delay)
+              console.log('DEBUG: Has departure?.delay?', !!(stopTime as any).departure?.delay)
+            }
+
             // Skip if this is the last stop of the trip
             // Get all stop times for this trip to find the maximum stop_sequence
             const tripStopTimes = gtfs.getStopTimes({ tripId: stopTime.trip_id })
