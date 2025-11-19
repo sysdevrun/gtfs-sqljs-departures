@@ -47,6 +47,17 @@ export const useDepartures = (
         const currentDate = formatInTimeZone(now, agencyTimezone, 'yyyyMMdd')
         const currentTime = formatInTimeZone(now, agencyTimezone, 'HH:mm:ss')
 
+        // WORKAROUND: getStopTimes with includeRealtime doesn't properly merge GTFS-RT data
+        // So we manually fetch and merge the realtime data ourselves
+        const realtimeStopTimeUpdates = gtfs.debugExportAllStopTimeUpdates()
+
+        // Create a lookup map for fast realtime data access: "tripId-stopId" -> realtime data
+        const realtimeMap = new Map<string, any>()
+        for (const stu of realtimeStopTimeUpdates) {
+          const key = `${stu.trip_id}-${stu.stop_id}`
+          realtimeMap.set(key, stu)
+        }
+
         const routeDirectionMap = new Map<string, RouteDirectionGroup>()
 
         // First pass: Get ALL stop times for today to identify all route-direction combinations
@@ -54,20 +65,31 @@ export const useDepartures = (
           const allStopTimes = gtfs.getStopTimes({
             stopId,
             date: currentDate,
-            includeRealtime: true
+            includeRealtime: false // We'll merge manually
           })
 
           for (const baseStopTime of allStopTimes) {
             // Cast to StopTime with GTFS-RT extensions
             const stopTime = baseStopTime as StopTimeWithRealtime
 
-            // DEBUG: Log the raw stopTime to see if realtime fields are present
-            if (stopTime.trip_id === '5-184614980' && stopId === '174') {
-              console.log('DEBUG: Raw stopTime for trip 5-184614980, stop 174:', JSON.stringify(stopTime, null, 2))
-              console.log('DEBUG: Has departure?.time?', !!(stopTime as any).departure?.time)
-              console.log('DEBUG: Has time?', !!(stopTime as any).time)
-              console.log('DEBUG: Has delay?', !!(stopTime as any).delay)
-              console.log('DEBUG: Has departure?.delay?', !!(stopTime as any).departure?.delay)
+            // MANUAL MERGE: Look up realtime data and merge it into stopTime
+            const realtimeKey = `${stopTime.trip_id}-${stopId}`
+            const realtimeData = realtimeMap.get(realtimeKey)
+
+            if (realtimeData) {
+              // Merge realtime fields into stopTime
+              if (realtimeData.departure) {
+                stopTime.departure = realtimeData.departure
+              }
+              if (realtimeData.arrival) {
+                stopTime.arrival = realtimeData.arrival
+              }
+              if (realtimeData.delay !== undefined) {
+                stopTime.delay = realtimeData.delay
+              }
+              if (realtimeData.time !== undefined) {
+                stopTime.time = realtimeData.time
+              }
             }
 
             // Skip if this is the last stop of the trip
