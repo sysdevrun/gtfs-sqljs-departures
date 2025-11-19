@@ -139,6 +139,8 @@ export const URLBuilder: React.FC = () => {
   const [showTechnicalDetails, setShowTechnicalDetails] = useState(stored?.showTechnicalDetails ?? false)
   const [primaryColor, setPrimaryColor] = useState(stored?.primaryColor || '3b82f6')
   const [secondaryColor, setSecondaryColor] = useState(stored?.secondaryColor || 'f97316')
+  const [logoUrl, setLogoUrl] = useState(stored?.logoUrl || '')
+  const [customAlertMessage, setCustomAlertMessage] = useState(stored?.customAlertMessage || '')
   const [showPreview, setShowPreview] = useState(false)
   const [showStopSelector, setShowStopSelector] = useState(false)
   const [showDatasetSearch, setShowDatasetSearch] = useState(false)
@@ -153,14 +155,16 @@ export const URLBuilder: React.FC = () => {
       refreshInterval,
       showTechnicalDetails,
       primaryColor,
-      secondaryColor
+      secondaryColor,
+      logoUrl,
+      customAlertMessage
     }
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(config))
     } catch (e) {
       console.error('Failed to save to localStorage:', e)
     }
-  }, [gtfsUrl, gtfsRtUrls, stopIds, showAlerts, refreshInterval, showTechnicalDetails, primaryColor, secondaryColor])
+  }, [gtfsUrl, gtfsRtUrls, stopIds, showAlerts, refreshInterval, showTechnicalDetails, primaryColor, secondaryColor, logoUrl, customAlertMessage])
 
   const buildUrl = (): string => {
     const params = new URLSearchParams()
@@ -172,6 +176,8 @@ export const URLBuilder: React.FC = () => {
     if (showTechnicalDetails) params.set('tech', 'true')
     if (primaryColor !== '3b82f6') params.set('primaryColor', primaryColor)
     if (secondaryColor !== 'f97316') params.set('secondaryColor', secondaryColor)
+    if (logoUrl) params.set('logoUrl', logoUrl)
+    if (customAlertMessage) params.set('customAlertMessage', customAlertMessage)
     params.set('lang', i18n.language)
 
     return `${window.location.origin}${window.location.pathname}?${params.toString()}`
@@ -185,7 +191,9 @@ export const URLBuilder: React.FC = () => {
     refreshInterval: parseInt(refreshInterval) || 20,
     showTechnicalDetails,
     primaryColor,
-    secondaryColor
+    secondaryColor,
+    logoUrl: logoUrl || undefined,
+    customAlertMessage: customAlertMessage || undefined
   })
 
   const applyPreset = (preset: Preset) => {
@@ -413,6 +421,39 @@ export const URLBuilder: React.FC = () => {
                     />
                   </div>
                   <p className="text-xs text-gray-500 mt-1">Default: f97316 (orange)</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Branding & Alerts */}
+            <div className="border-t pt-4">
+              <h3 className="text-lg font-semibold text-gray-800 mb-3">{t('urlBuilder.brandingAlerts')}</h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    {t('urlBuilder.logoUrl')}
+                  </label>
+                  <input
+                    type="text"
+                    value={logoUrl}
+                    onChange={(e) => setLogoUrl(e.target.value)}
+                    placeholder={t('urlBuilder.logoUrlPlaceholder')}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">{t('urlBuilder.logoUrlHelp')}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    {t('urlBuilder.customAlertMessage')}
+                  </label>
+                  <textarea
+                    value={customAlertMessage}
+                    onChange={(e) => setCustomAlertMessage(e.target.value)}
+                    placeholder={t('urlBuilder.customAlertPlaceholder')}
+                    rows={3}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-y"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">{t('urlBuilder.customAlertHelp')}</p>
                 </div>
               </div>
             </div>
