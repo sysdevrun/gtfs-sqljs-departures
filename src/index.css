@@ -23,47 +23,20 @@ code {
     monospace;
 }
 
-/* Container Query setup for adaptive height */
-.departure-board-container {
-  container-type: size;
-  container-name: departure-board;
-  height: calc(100vh - 60px); /* Full viewport minus sticky header */
-}
+/* Mobile: Fixed sizes (no container queries) */
+@media (max-width: 767px) {
+  .departure-board-container {
+    height: auto;
+  }
 
-/* Adaptive row sizing based on container height */
-@container departure-board (min-height: 400px) {
   .adaptive-row {
-    min-height: 8cqh; /* 8% of container height */
-    max-height: 12cqh;
-  }
-
-  .adaptive-route-icon {
-    height: 6cqh;
-    min-width: 6cqh;
-    font-size: clamp(0.875rem, 2cqh, 1.5rem);
-  }
-
-  .adaptive-departure-square {
-    height: 8cqh;
-    min-width: 5rem;
-    max-height: 6rem;
-  }
-
-  .adaptive-departure-square.with-tech {
-    height: 9cqh;
-    max-height: 7rem;
-  }
-}
-
-/* Smaller containers - use fixed sizes */
-@container departure-board (max-height: 399px) {
-  .adaptive-row {
-    min-height: 80px;
+    min-height: auto;
   }
 
   .adaptive-route-icon {
     height: 56px;
     min-width: 56px;
+    font-size: 1.125rem;
   }
 
   .adaptive-departure-square {
@@ -75,22 +48,76 @@ code {
   }
 }
 
-/* Very tall containers - cap the sizes */
-@container departure-board (min-height: 1000px) {
-  .adaptive-row {
-    max-height: 120px;
+/* Desktop/Tablet: Container Query setup for adaptive height */
+@media (min-width: 768px) {
+  .departure-board-container {
+    container-type: size;
+    container-name: departure-board;
+    height: calc(100vh - 60px); /* Full viewport minus sticky header */
   }
 
-  .adaptive-route-icon {
-    height: clamp(56px, 6cqh, 84px);
-    min-width: clamp(56px, 6cqh, 84px);
+  /* Adaptive row sizing based on container height */
+  @container departure-board (min-height: 400px) {
+    .adaptive-row {
+      min-height: 8cqh; /* 8% of container height */
+      max-height: 12cqh;
+    }
+
+    .adaptive-route-icon {
+      height: 6cqh;
+      min-width: 6cqh;
+      font-size: clamp(0.875rem, 2cqh, 1.5rem);
+    }
+
+    .adaptive-departure-square {
+      height: 8cqh;
+      min-width: 5rem;
+      max-height: 6rem;
+    }
+
+    .adaptive-departure-square.with-tech {
+      height: 9cqh;
+      max-height: 7rem;
+    }
   }
 
-  .adaptive-departure-square {
-    height: clamp(80px, 8cqh, 100px);
+  /* Smaller containers - use fixed sizes */
+  @container departure-board (max-height: 399px) {
+    .adaptive-row {
+      min-height: 80px;
+    }
+
+    .adaptive-route-icon {
+      height: 56px;
+      min-width: 56px;
+    }
+
+    .adaptive-departure-square {
+      height: 80px;
+    }
+
+    .adaptive-departure-square.with-tech {
+      height: 96px;
+    }
   }
 
-  .adaptive-departure-square.with-tech {
-    height: clamp(96px, 9cqh, 120px);
+  /* Very tall containers - cap the sizes */
+  @container departure-board (min-height: 1000px) {
+    .adaptive-row {
+      max-height: 120px;
+    }
+
+    .adaptive-route-icon {
+      height: clamp(56px, 6cqh, 84px);
+      min-width: clamp(56px, 6cqh, 84px);
+    }
+
+    .adaptive-departure-square {
+      height: clamp(80px, 8cqh, 100px);
+    }
+
+    .adaptive-departure-square.with-tech {
+      height: clamp(96px, 9cqh, 120px);
+    }
   }
 }
