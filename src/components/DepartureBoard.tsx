@@ -161,6 +161,8 @@ export const DepartureBoard: React.FC<DepartureBoardProps> = ({ config }) => {
                     timezone={timezone}
                     agencyName={agencyName}
                     lastRenderTime={lastRenderTime}
+                    gtfs={gtfs}
+                    stopIds={config.stopIds}
                   />
                 )}
               </div>
@@ -175,6 +177,8 @@ export const DepartureBoard: React.FC<DepartureBoardProps> = ({ config }) => {
                   timezone={timezone}
                   agencyName={agencyName}
                   lastRenderTime={lastRenderTime}
+                  gtfs={gtfs}
+                  stopIds={config.stopIds}
                 />
               </div>
             </div>
