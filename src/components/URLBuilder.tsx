@@ -396,7 +396,7 @@ export const URLBuilder: React.FC = () => {
             {/* Color Theme */}
             <div className="border-t pt-4">
               <h3 className="text-lg font-semibold text-gray-800 mb-3">Color Theme</h3>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Primary Color
