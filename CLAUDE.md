@@ -180,6 +180,110 @@ Routes are sorted by:
 
 For each (route, direction_id) pair, the unique headsigns from all trips are collected and the first one is displayed next to the route icon.
 
+## GTFS-RT Realtime Data Handling
+
+The application supports multiple GTFS-RT data formats and intelligently determines which departure time to display using a **three-tier priority system**.
+
+### Three-Tier Logic for Departure Times
+
+#### Priority 1: Absolute Timestamp (Highest Priority)
+
+**Source**: `stopTime.departure.time` or `stopTime.time`
+
+```typescript
+if (stopTime.departure?.time || stopTime.time) {
+  // Use realtime timestamp directly (Unix timestamp in seconds)
+  departureDate = new Date(realtimeTimestamp * 1000)
+}
+```
+
+**When used:**
+- GTFS-RT feed provides absolute departure timestamp
+- Most accurate and authoritative realtime value
+- Common in feeds that calculate exact departure times
+
+**Example**: Timestamp `1700000000` → Direct conversion to JavaScript Date
+
+#### Priority 2: Relative Delay (Medium Priority)
+
+**Source**: `stopTime.departure.delay` or `stopTime.delay`
+
+```typescript
+else {
+  // Parse scheduled time, then add delay
+  departureDate = new Date(scheduledTime)
+  const delay = stopTime.departure?.delay || stopTime.delay
+  if (delay) {
+    departureDate = new Date(departureDate.getTime() + delay * 1000)
+  }
+}
+```
+
+**When used:**
+- No absolute timestamp available
+- GTFS-RT feed provides delay in seconds (can be positive or negative)
+- Scheduled time is adjusted by the delay value
+
+**Example**: Scheduled `14:30:00` + delay `180` seconds = `14:33:00`
+
+#### Priority 3: Static Schedule (Fallback)
+
+**Source**: `stopTime.departure_time` from static GTFS
+
+```typescript
+else {
+  // Parse scheduled time with timezone handling
+  departureDate = new Date(/* parsed from departure_time */)
+}
+```
+
+**When used:**
+- No realtime data available
+- Shows scheduled departure time from GTFS feed
+- Handles midnight-spanning times (e.g., `25:00:00` = `01:00:00` next day)
+
+### Combined Data Scenarios
+
+**Scenario 1: Both timestamp AND delay present**
+- Uses timestamp (Priority 1)
+- Ignores delay
+- Rationale: Absolute timestamp is authoritative
+
+**Scenario 2: Only delay present**
+- Uses scheduled time + delay (Priority 2)
+- Accurate for feeds providing relative adjustments
+
+**Scenario 3: No realtime data**
+- Uses static schedule (Priority 3)
+- Standard GTFS behavior
+
+### Realtime Detection
+
+A departure is marked as realtime if ANY of these fields exist:
+
+```typescript
+isRealtime = !!(
+  stopTime.delay ||
+  stopTime.time ||
+  stopTime.departure?.time ||
+  stopTime.departure?.delay ||
+  stopTime.arrival?.time ||
+  stopTime.arrival?.delay
+)
+```
+
+This ensures compatibility with various GTFS-RT feed structures.
+
+### Visual Indicators
+
+- **Realtime departures**: Green background (`bg-green-700`)
+- **Static departures**: Dark gray background (`bg-gray-600`)
+- **Time display**: Shows the computed departure time (from Priority 1, 2, or 3)
+
+### Implementation Location
+
+All realtime logic is implemented in `src/hooks/useDepartures.ts` (lines 85-134).
+
 ## CRITICAL: Timezone Handling
 
 **All time operations MUST use the agency timezone, NOT the browser timezone.**
