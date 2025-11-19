@@ -84,38 +84,54 @@ export const useDepartures = (
 
             // Only add to departures if it hasn't passed yet
             if (stopTime.departure_time >= currentTime) {
-              // Parse departure time and create it in agency timezone
-              const [hours, minutes, seconds] = stopTime.departure_time.split(':').map(Number)
+              let departureDate: Date
 
-              // GTFS allows hours >= 24 for times spanning midnight (e.g., 25:00 = 1 AM next day)
-              // We need to handle this by adding days if hours >= 24
-              const daysToAdd = Math.floor(hours / 24)
-              const actualHours = hours % 24
+              // Check for GTFS-RT realtime timestamp (absolute time)
+              const realtimeTimestamp = (stopTime as any).departure?.time || (stopTime as any).time
 
-              // Format current time in agency timezone with timezone offset (e.g., "2024-01-15T19:34:00+01:00")
-              const agencyNowWithOffset = formatInTimeZone(now, agencyTimezone, "yyyy-MM-dd'T'HH:mm:ssXXX")
+              if (realtimeTimestamp) {
+                // Use realtime timestamp directly (Unix timestamp in seconds)
+                departureDate = new Date(realtimeTimestamp * 1000)
+              } else {
+                // Parse scheduled departure time
+                const [hours, minutes, seconds] = stopTime.departure_time.split(':').map(Number)
 
-              // Extract date part (2024-01-15T) and timezone offset (+01:00)
-              let agencyDate = agencyNowWithOffset.substring(0, 11)
-              const agencyOffset = agencyNowWithOffset.substring(19)
+                // GTFS allows hours >= 24 for times spanning midnight (e.g., 25:00 = 1 AM next day)
+                const daysToAdd = Math.floor(hours / 24)
+                const actualHours = hours % 24
 
-              // If hours >= 24, we need to add days to the date
-              if (daysToAdd > 0) {
-                const baseDateStr = agencyNowWithOffset.substring(0, 10) // "2024-01-15"
-                const baseDate = new Date(baseDateStr + 'T00:00:00' + agencyOffset)
-                baseDate.setDate(baseDate.getDate() + daysToAdd)
-                // Format back to ISO date with T
-                agencyDate = formatInTimeZone(baseDate, agencyTimezone, "yyyy-MM-dd'T'")
+                // Format current time in agency timezone with timezone offset (e.g., "2024-01-15T19:34:00+01:00")
+                const agencyNowWithOffset = formatInTimeZone(now, agencyTimezone, "yyyy-MM-dd'T'HH:mm:ssXXX")
+
+                // Extract date part (2024-01-15T) and timezone offset (+01:00)
+                let agencyDate = agencyNowWithOffset.substring(0, 11)
+                const agencyOffset = agencyNowWithOffset.substring(19)
+
+                // If hours >= 24, we need to add days to the date
+                if (daysToAdd > 0) {
+                  const baseDateStr = agencyNowWithOffset.substring(0, 10) // "2024-01-15"
+                  const baseDate = new Date(baseDateStr + 'T00:00:00' + agencyOffset)
+                  baseDate.setDate(baseDate.getDate() + daysToAdd)
+                  // Format back to ISO date with T
+                  agencyDate = formatInTimeZone(baseDate, agencyTimezone, "yyyy-MM-dd'T'")
+                }
+
+                // Build time string (16:46:00)
+                const timeStr = `${actualHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${(seconds || 0).toString().padStart(2, '0')}`
+
+                // Combine to create ISO string in agency timezone (e.g., "2024-01-15T16:46:00+01:00")
+                const departureISOString = `${agencyDate}${timeStr}${agencyOffset}`
+
+                // Parse scheduled time as Date
+                departureDate = new Date(departureISOString)
+
+                // Check for GTFS-RT delay (relative adjustment in seconds)
+                const delay = (stopTime as any).departure?.delay || (stopTime as any).delay
+                if (delay) {
+                  // Add delay to scheduled time
+                  departureDate = new Date(departureDate.getTime() + delay * 1000)
+                }
               }
-
-              // Build time string (16:46:00)
-              const timeStr = `${actualHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${(seconds || 0).toString().padStart(2, '0')}`
-
-              // Combine to create ISO string in agency timezone (e.g., "2024-01-15T16:46:00+01:00")
-              const departureISOString = `${agencyDate}${timeStr}${agencyOffset}`
-
-              // Parse as Date - this correctly interprets the timezone offset
-              const departureDate = new Date(departureISOString)
 
               // Add departure
               group.departures.push({
