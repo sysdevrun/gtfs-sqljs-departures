@@ -61,6 +61,14 @@ export const useDepartures = (
             // Cast to StopTime with GTFS-RT extensions
             const stopTime = baseStopTime as StopTimeWithRealtime
 
+            // Skip if this is the last stop of the trip
+            // Get all stop times for this trip to find the maximum stop_sequence
+            const tripStopTimes = gtfs.getStopTimes({ tripId: stopTime.trip_id })
+            const maxStopSequence = Math.max(...tripStopTimes.map(st => st.stop_sequence))
+            if (stopTime.stop_sequence === maxStopSequence) {
+              continue // Skip last stop - no departures beyond this point
+            }
+
             const trip = gtfs.getTrips({ tripId: stopTime.trip_id })[0]
             if (!trip) continue
 
@@ -184,7 +192,10 @@ export const useDepartures = (
             group.departures[group.departures.length - 1].isLastDeparture = true
           }
 
-          sortedGroups.push(group)
+          // Only add groups that have at least one departure
+          if (group.departures.length > 0) {
+            sortedGroups.push(group)
+          }
         })
 
         // Sort groups by route sort order, then by route short name

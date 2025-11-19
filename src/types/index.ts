@@ -35,6 +35,7 @@ export interface AppConfig {
   showAlerts: boolean
   refreshInterval: number // in seconds
   showTechnicalDetails: boolean
+  showDebug: boolean // Show debug panel with raw GTFS data
   primaryColor: string // hex color without #
   secondaryColor: string // hex color without #
   logoUrl?: string // URL to logo image displayed next to clock

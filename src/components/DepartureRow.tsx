@@ -19,21 +19,14 @@ export const DepartureRow: React.FC<DepartureRowProps> = ({ group, timezone, now
 
   return (
     <div className="adaptive-row flex flex-col md:flex-row md:items-center gap-3 md:gap-4 p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow border border-gray-200">
-      {/* Mobile layout: Route name on top */}
-      <div className="flex items-center gap-3 md:hidden">
-        <div className="flex-shrink-0">
-          <RouteIcon
-            routeShortName={group.routeShortName}
-            routeColor={group.routeColor}
-            routeTextColor={group.routeTextColor}
-            className="adaptive-route-icon"
-          />
-        </div>
-        <div className="flex-grow min-w-0">
-          <div className="font-bold text-gray-900 text-lg">
-            {group.routeShortName}
-          </div>
-        </div>
+      {/* Mobile layout: Route icon only */}
+      <div className="flex-shrink-0 md:hidden">
+        <RouteIcon
+          routeShortName={group.routeShortName}
+          routeColor={group.routeColor}
+          routeTextColor={group.routeTextColor}
+          className="adaptive-route-icon"
+        />
       </div>
 
       {/* Desktop layout: Route icon only */}
