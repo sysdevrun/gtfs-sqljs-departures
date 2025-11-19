@@ -336,22 +336,24 @@ export const URLBuilder: React.FC = () => {
               <p className="text-xs text-gray-500 mt-1">{t('urlBuilder.stopIdsHelp')}</p>
             </div>
 
-            <div className="flex items-center gap-4">
-              <div className="flex-1">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  {t('urlBuilder.refreshInterval')}
-                </label>
-                <input
-                  type="number"
-                  value={refreshInterval}
-                  onChange={(e) => setRefreshInterval(e.target.value)}
-                  min="5"
-                  max="300"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                />
-              </div>
+            {/* Refresh Interval */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                {t('urlBuilder.refreshInterval')}
+              </label>
+              <input
+                type="number"
+                value={refreshInterval}
+                onChange={(e) => setRefreshInterval(e.target.value)}
+                min="5"
+                max="300"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              />
+            </div>
 
-              <div className="flex items-center pt-8">
+            {/* Checkboxes */}
+            <div className="space-y-3">
+              <div className="flex items-center">
                 <input
                   type="checkbox"
                   id="showAlerts"
@@ -364,7 +366,7 @@ export const URLBuilder: React.FC = () => {
                 </label>
               </div>
 
-              <div className="flex items-center pt-8">
+              <div className="flex items-center">
                 <input
                   type="checkbox"
                   id="showTechnicalDetails"
@@ -377,7 +379,7 @@ export const URLBuilder: React.FC = () => {
                 </label>
               </div>
 
-              <div className="flex items-center pt-4">
+              <div className="flex items-center">
                 <input
                   type="checkbox"
                   id="showDebug"
