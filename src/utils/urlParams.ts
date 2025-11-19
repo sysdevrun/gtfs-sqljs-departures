@@ -24,6 +24,9 @@ export const parseUrlParams = (): AppConfig => {
   // Parse technical details flag
   const showTechnicalDetails = params.get('tech') === 'true'
 
+  // Parse debug flag
+  const showDebug = params.get('debug') === 'true'
+
   // Parse color theme (defaults: blue and orange)
   const primaryColor = params.get('primaryColor') || '3b82f6'
   const secondaryColor = params.get('secondaryColor') || 'f97316'
@@ -41,6 +44,7 @@ export const parseUrlParams = (): AppConfig => {
     showAlerts,
     refreshInterval: isNaN(refreshInterval) ? 20 : refreshInterval,
     showTechnicalDetails,
+    showDebug,
     primaryColor,
     secondaryColor,
     logoUrl,

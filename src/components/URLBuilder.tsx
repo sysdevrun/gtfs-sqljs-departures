@@ -137,6 +137,7 @@ export const URLBuilder: React.FC = () => {
   const [showAlerts, setShowAlerts] = useState(stored?.showAlerts ?? false)
   const [refreshInterval, setRefreshInterval] = useState(stored?.refreshInterval || '20')
   const [showTechnicalDetails, setShowTechnicalDetails] = useState(stored?.showTechnicalDetails ?? false)
+  const [showDebug, setShowDebug] = useState(stored?.showDebug ?? false)
   const [primaryColor, setPrimaryColor] = useState(stored?.primaryColor || '3b82f6')
   const [secondaryColor, setSecondaryColor] = useState(stored?.secondaryColor || 'f97316')
   const [logoUrl, setLogoUrl] = useState(stored?.logoUrl || '')
@@ -154,6 +155,7 @@ export const URLBuilder: React.FC = () => {
       showAlerts,
       refreshInterval,
       showTechnicalDetails,
+      showDebug,
       primaryColor,
       secondaryColor,
       logoUrl,
@@ -164,7 +166,7 @@ export const URLBuilder: React.FC = () => {
     } catch (e) {
       console.error('Failed to save to localStorage:', e)
     }
-  }, [gtfsUrl, gtfsRtUrls, stopIds, showAlerts, refreshInterval, showTechnicalDetails, primaryColor, secondaryColor, logoUrl, customAlertMessage])
+  }, [gtfsUrl, gtfsRtUrls, stopIds, showAlerts, refreshInterval, showTechnicalDetails, showDebug, primaryColor, secondaryColor, logoUrl, customAlertMessage])
 
   const buildUrl = (): string => {
     const params = new URLSearchParams()
@@ -174,6 +176,7 @@ export const URLBuilder: React.FC = () => {
     if (showAlerts) params.set('showAlerts', 'true')
     if (refreshInterval) params.set('refresh', refreshInterval)
     if (showTechnicalDetails) params.set('tech', 'true')
+    if (showDebug) params.set('debug', 'true')
     if (primaryColor !== '3b82f6') params.set('primaryColor', primaryColor)
     if (secondaryColor !== 'f97316') params.set('secondaryColor', secondaryColor)
     if (logoUrl) params.set('logoUrl', logoUrl)
@@ -190,6 +193,7 @@ export const URLBuilder: React.FC = () => {
     showAlerts,
     refreshInterval: parseInt(refreshInterval) || 20,
     showTechnicalDetails,
+    showDebug,
     primaryColor,
     secondaryColor,
     logoUrl: logoUrl || undefined,
@@ -370,6 +374,19 @@ export const URLBuilder: React.FC = () => {
                 />
                 <label htmlFor="showTechnicalDetails" className="ml-2 text-sm font-semibold text-gray-700">
                   Show Technical Details
+                </label>
+              </div>
+
+              <div className="flex items-center pt-4">
+                <input
+                  type="checkbox"
+                  id="showDebug"
+                  checked={showDebug}
+                  onChange={(e) => setShowDebug(e.target.checked)}
+                  className="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500"
+                />
+                <label htmlFor="showDebug" className="ml-2 text-sm font-semibold text-gray-700">
+                  Show Debug Panel (Raw GTFS Data)
                 </label>
               </div>
             </div>

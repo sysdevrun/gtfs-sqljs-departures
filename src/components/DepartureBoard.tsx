@@ -4,6 +4,7 @@ import { formatInTimeZone } from 'date-fns-tz'
 import { DepartureRow } from './DepartureRow'
 import { AlertsPanel } from './AlertsPanel'
 import { TechnicalDetailsPanel } from './TechnicalDetailsPanel'
+import { DebugPanel } from './DebugPanel'
 import { SplashScreen } from './SplashScreen'
 import { useGtfs } from '../hooks/useGtfs'
 import { useDepartures } from '../hooks/useDepartures'
@@ -181,6 +182,13 @@ export const DepartureBoard: React.FC<DepartureBoardProps> = ({ config }) => {
             </div>
           )}
         </div>
+
+        {/* Debug panel - full width at bottom */}
+        {config.showDebug && (
+          <div className="mt-6">
+            <DebugPanel groups={groups} />
+          </div>
+        )}
       </div>
     </div>
   )
