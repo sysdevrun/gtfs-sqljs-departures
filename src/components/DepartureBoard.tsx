@@ -132,26 +132,24 @@ export const DepartureBoard: React.FC<DepartureBoardProps> = ({ config }) => {
       <div className="container mx-auto p-4">
         <div className={`flex flex-col ${config.showAlerts ? 'lg:flex-row' : ''} gap-6`}>
           <div className={config.showAlerts ? 'lg:w-2/3' : 'w-full'}>
-            {/* Container query wrapper for adaptive height */}
-            <div className="departure-board-container">
-              <div className="space-y-3 h-full overflow-y-auto">
-                {groups.length === 0 ? (
-                  <div className="bg-white rounded-lg shadow p-8 text-center text-gray-500">
-                    {t('departureBoard.noDepartures')}
-                  </div>
-                ) : (
-                  groups.map((group) => (
-                    <DepartureRow
-                      key={`${group.routeId}-${group.directionId}`}
-                      group={group}
-                      timezone={timezone}
-                      now={now}
-                      showTechnicalDetails={config.showTechnicalDetails}
-                    />
-                  ))
-                )}
+            {/* Flexbox container for adaptive height */}
+            {groups.length === 0 ? (
+              <div className="bg-white rounded-lg shadow p-8 text-center text-gray-500">
+                {t('departureBoard.noDepartures')}
               </div>
-            </div>
+            ) : (
+              <div className="departure-board-container">
+                {groups.map((group) => (
+                  <DepartureRow
+                    key={`${group.routeId}-${group.directionId}`}
+                    group={group}
+                    timezone={timezone}
+                    now={now}
+                    showTechnicalDetails={config.showTechnicalDetails}
+                  />
+                ))}
+              </div>
+            )}
           </div>
 
           {config.showAlerts && (
