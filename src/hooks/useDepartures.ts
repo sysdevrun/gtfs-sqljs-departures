@@ -1,7 +1,13 @@
 import { useState, useEffect } from 'react'
-import { GtfsSqlJs } from 'gtfs-sqljs'
-import { RouteDirectionGroup } from '../types'
+import { GtfsSqlJs, StopTime } from 'gtfs-sqljs'
+import { RouteDirectionGroup, StopTimeWithRealtimeExtensions } from '../types'
 import { formatInTimeZone } from 'date-fns-tz'
+
+/**
+ * StopTime with GTFS-RT extensions
+ * Combines base StopTime type with realtime fields
+ */
+type StopTimeWithRealtime = StopTime & StopTimeWithRealtimeExtensions
 
 interface UseDeparturesResult {
   groups: RouteDirectionGroup[]
@@ -51,7 +57,10 @@ export const useDepartures = (
             includeRealtime: true
           })
 
-          for (const stopTime of allStopTimes) {
+          for (const baseStopTime of allStopTimes) {
+            // Cast to StopTime with GTFS-RT extensions
+            const stopTime = baseStopTime as StopTimeWithRealtime
+
             const trip = gtfs.getTrips({ tripId: stopTime.trip_id })[0]
             if (!trip) continue
 
@@ -87,7 +96,7 @@ export const useDepartures = (
               let departureDate: Date
 
               // Check for GTFS-RT realtime timestamp (absolute time)
-              const realtimeTimestamp = (stopTime as any).departure?.time || (stopTime as any).time
+              const realtimeTimestamp = stopTime.departure?.time || stopTime.time
 
               if (realtimeTimestamp) {
                 // Use realtime timestamp directly (Unix timestamp in seconds)
@@ -126,7 +135,7 @@ export const useDepartures = (
                 departureDate = new Date(departureISOString)
 
                 // Check for GTFS-RT delay (relative adjustment in seconds)
-                const delay = (stopTime as any).departure?.delay || (stopTime as any).delay
+                const delay = stopTime.departure?.delay || stopTime.delay
                 if (delay) {
                   // Add delay to scheduled time
                   departureDate = new Date(departureDate.getTime() + delay * 1000)
@@ -148,14 +157,14 @@ export const useDepartures = (
                 departureTime: departureDate,
                 // Check for realtime data in multiple possible locations
                 isRealtime: !!(
-                  (stopTime as any).delay ||
-                  (stopTime as any).time ||
-                  (stopTime as any).departure?.time ||
-                  (stopTime as any).departure?.delay ||
-                  (stopTime as any).arrival?.time ||
-                  (stopTime as any).arrival?.delay
+                  stopTime.delay ||
+                  stopTime.time ||
+                  stopTime.departure?.time ||
+                  stopTime.departure?.delay ||
+                  stopTime.arrival?.time ||
+                  stopTime.arrival?.delay
                 ),
-                delay: (stopTime as any).delay || (stopTime as any).departure?.delay,
+                delay: stopTime.delay || stopTime.departure?.delay,
                 isLastDeparture: false, // Will be set later
                 tripId: stopTime.trip_id
               })

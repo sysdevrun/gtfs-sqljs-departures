@@ -1,3 +1,27 @@
+/**
+ * GTFS-RT StopTimeEvent - represents realtime data for arrival/departure
+ * Based on GTFS Realtime specification
+ */
+export interface StopTimeEvent {
+  delay?: number // Delay in seconds (can be positive or negative)
+  time?: number // Unix timestamp (seconds since epoch)
+  uncertainty?: number // Uncertainty of prediction in seconds
+}
+
+/**
+ * StopTime with GTFS-RT extensions
+ * Extends the base StopTime type from gtfs-sqljs with realtime fields
+ */
+export interface StopTimeWithRealtimeExtensions {
+  // Flat structure (legacy GTFS-RT format)
+  delay?: number
+  time?: number
+
+  // Nested structure (GTFS-RT standard format)
+  departure?: StopTimeEvent
+  arrival?: StopTimeEvent
+}
+
 export interface PresetConfig {
   name: string
   gtfsUrl: string
