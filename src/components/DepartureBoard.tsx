@@ -186,7 +186,7 @@ export const DepartureBoard: React.FC<DepartureBoardProps> = ({ config }) => {
         {/* Debug panel - full width at bottom */}
         {config.showDebug && (
           <div className="mt-6">
-            <DebugPanel groups={groups} />
+            <DebugPanel groups={groups} gtfs={gtfs} gtfsRtUrls={config.gtfsRtUrls} />
           </div>
         )}
       </div>
