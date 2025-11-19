@@ -138,6 +138,19 @@ export const DebugPanel: React.FC<DebugPanelProps> = ({ groups, gtfs, gtfsRtUrls
                       {tripUpdate && (
                         <div className="ml-2 mt-1">
                           <div className="text-blue-400">Trip Update:</div>
+                          {tripUpdate.stop_time_update && tripUpdate.stop_time_update.length > 0 && (
+                            <div className="ml-2 mt-1 mb-2 p-2 bg-blue-800 bg-opacity-40 rounded">
+                              <div className="text-blue-200 font-semibold">Stops with Realtime Data:</div>
+                              <div className="ml-2 text-xs">
+                                {tripUpdate.stop_time_update.map((stu: any, idx: number) => (
+                                  <div key={idx} className={stu.stop_id === departure.stopId ? 'text-green-300 font-bold' : 'text-gray-400'}>
+                                    • Stop {stu.stop_id} (seq: {stu.stop_sequence})
+                                    {stu.stop_id === departure.stopId && ' ← THIS STOP'}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                           <div className="ml-2 text-xs">
                             <pre className="text-gray-300">{JSON.stringify(tripUpdate, null, 2)}</pre>
                           </div>
@@ -155,11 +168,26 @@ export const DebugPanel: React.FC<DebugPanelProps> = ({ groups, gtfs, gtfsRtUrls
                     </div>
                   )}
 
+                  {!stopTimeUpdate && tripUpdate && (
+                    <div className="mt-2 p-2 bg-orange-900 bg-opacity-30 rounded border border-orange-500">
+                      <div className="text-orange-300">⚠ Trip has GTFS-RT data, but NOT for this stop</div>
+                      <div className="text-orange-200 text-xs mt-1">
+                        Trip {departure.tripId} has realtime updates for {tripUpdate.stop_time_update?.length || 0} stops, but stop {departure.stopId} is not included.
+                      </div>
+                      <div className="text-orange-200 text-xs mt-1">
+                        This is common - GTFS-RT feeds often only track timing points, not all stops.
+                      </div>
+                    </div>
+                  )}
+
                   {!tripUpdate && !stopTimeUpdate && realtimeStats.totalStopTimeUpdates > 0 && (
                     <div className="mt-2 p-2 bg-red-900 bg-opacity-30 rounded border border-red-500">
-                      <div className="text-red-300">⚠ No GTFS-RT match found for this trip/stop combination</div>
+                      <div className="text-red-300">⚠ No GTFS-RT data for this trip</div>
                       <div className="text-red-400 text-xs mt-1">
                         Trip ID: {departure.tripId} | Stop ID: {departure.stopId}
+                      </div>
+                      <div className="text-red-400 text-xs mt-1">
+                        The GTFS-RT feed may not cover this trip, or the data may be stale.
                       </div>
                     </div>
                   )}
