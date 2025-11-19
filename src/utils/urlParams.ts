@@ -27,6 +27,9 @@ export const parseUrlParams = (): AppConfig => {
   // Parse debug flag
   const showDebug = params.get('debug') === 'true'
 
+  // Parse QR code flag
+  const showQrCode = params.get('qrcode') === 'true'
+
   // Parse color theme (defaults: blue and orange)
   const primaryColor = params.get('primaryColor') || '3b82f6'
   const secondaryColor = params.get('secondaryColor') || 'f97316'
@@ -45,6 +48,7 @@ export const parseUrlParams = (): AppConfig => {
     refreshInterval: isNaN(refreshInterval) ? 20 : refreshInterval,
     showTechnicalDetails,
     showDebug,
+    showQrCode,
     primaryColor,
     secondaryColor,
     logoUrl,
